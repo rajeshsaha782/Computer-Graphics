@@ -123,6 +123,20 @@ void Bottom(int a)
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+
+      glBegin(GL_LINES);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2f(-595,595);
+    glVertex2f(595,595);
+    glVertex2f(-595,595);
+    glVertex2f(-595,-595);
+     glVertex2f(-595,-595);
+    glVertex2f(595,-595);
+     glVertex2f(595,-595);
+    glVertex2f(595,595);
+    glEnd();
+
+
     int a=0;
     for(int i=0;i<=10;i++)
     {
