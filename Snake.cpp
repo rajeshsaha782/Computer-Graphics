@@ -1,33 +1,66 @@
 #include<windows.h>
+#include <stdlib.h>
 #include<iostream>
 #include<cstdio>
 #include <GL/gl.h>
 #include <GL/glut.h>
-#include<string.h>
+#include <time.h>
 
 using namespace std;
 
 string direction="right";
 GLint  positionX=0,positionY=0,speed=10;
-int snake_size[10];
-
+int snake_size[10],Rx,Ry;
+bool visited=false;
 
 void init()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glOrtho(-600.0, 600.0, -600.0, 600.0, -1.0, 1.0);
+    glOrtho(0.0, 600.0, 0.0, 600.0, -1.0, 1.0);
 }
+
+int random(int min, int max) //range : [min, max)
+{
+   static bool first = true;
+   if (first)
+   {
+      srand( time(NULL) ); //seeding for the first time only!
+      first = false;
+   }
+   return min + rand() % (( max + 1 ) - min);
+}
+
+void RandomPoints()
+{
+     Rx=random(0,600);
+     Ry=random(0,600);
+     Rx=Rx-(Rx%10);
+     Ry=Ry-(Ry%10);
+}
+
+void RandomBox()
+{
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2f(Rx,Ry);
+    glVertex2f(Rx+10,Ry);
+    glVertex2f(Rx+10,Ry+10);
+    glVertex2f(Rx,Ry+10);
+    glEnd();
+   // cout<<"X:"<<Rx<<"Y:"<<Ry<<endl;
+}
+
 void update(int value)
 {
 
-    if( positionX >= 650)
-         positionX = -600;
-    else if( positionX <= -650)
+    if( positionX >= 700)
+         positionX = 0;
+    else if( positionX <=-110)
          positionX = 600;
 
-    else if( positionY >= 650)
-         positionY = -600;
-    else if( positionY <= -650)
+    else if( positionY >= 700)
+         positionY = 0;
+    else if( positionY <= -110)
          positionY = 600;
 
     if(direction=="right")
@@ -51,8 +84,9 @@ void update(int value)
     glutPostRedisplay();
 
 
-    glutTimerFunc(1000, update, 0);
+    glutTimerFunc(100, update, 0);
 }
+
 void SpecialFunc(int key, int x, int y)
 {
     if(direction=="right" || direction=="left")
@@ -80,62 +114,83 @@ void SpecialFunc(int key, int x, int y)
 
 
 }
+
+void Check()
+{
+    if(positionX>=590 || positionY>=590)
+    {
+        speed =0;
+    }
+}
+
 void Right(int a)
 {
+    //Check();
+
    glBegin(GL_QUADS);
     glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(0-a,0);
-    glVertex2f(20-a,0);
-    glVertex2f(20-a,20);
-    glVertex2f(0-a,20);
+    glVertex2f(0-a,100);
+    glVertex2f(10-a,100);
+    glVertex2f(10-a,110);
+    glVertex2f(0-a,110);
     glEnd();
+    cout<<"X:"<<10-a<<" Y:"<<100<<endl;
 }
 void Left(int a)
 {
    glBegin(GL_QUADS);
     glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(0+a,0);
-    glVertex2f(20+a,0);
-    glVertex2f(20+a,20);
-    glVertex2f(0+a,20);
+    glVertex2f(0+a,100);
+    glVertex2f(10+a,100);
+    glVertex2f(10+a,110);
+    glVertex2f(0+a,110);
     glEnd();
+    //cout<<"X:"<<0<<"Y:"<<0+a<<endl;
 }
 void Top(int a)
 {
    glBegin(GL_QUADS);
     glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(0,0-a);
-    glVertex2f(20,0-a);
-    glVertex2f(20,20-a);
-    glVertex2f(0,20-a);
+    glVertex2f(0,100-a);
+    glVertex2f(10,100-a);
+    glVertex2f(10,110-a);
+    glVertex2f(0,110-a);
     glEnd();
+    //cout<<"X:"<<0<<"Y:"<<0+a<<endl;
 }
 void Bottom(int a)
 {
    glBegin(GL_QUADS);
     glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(0,0+a);
-    glVertex2f(20,0+a);
-    glVertex2f(20,20+a);
-    glVertex2f(0,20+a);
+    glVertex2f(0,100+a);
+    glVertex2f(10,100+a);
+    glVertex2f(10,110+a);
+    glVertex2f(0,110+a);
     glEnd();
+
+    //cout<<"X:"<<0<<"Y:"<<0+a<<endl;
 }
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    if(!visited)
+    {
+      RandomPoints();
+      visited=true;
+    }
+    RandomBox();
 
       glBegin(GL_LINES);
     glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(-595,595);
-    glVertex2f(595,595);
-    glVertex2f(-595,595);
-    glVertex2f(-595,-595);
-     glVertex2f(-595,-595);
-    glVertex2f(595,-595);
-     glVertex2f(595,-595);
-    glVertex2f(595,595);
+    glVertex2f(10,590);
+    glVertex2f(590,590);
+    glVertex2f(10,590);
+    glVertex2f(10,10);
+     glVertex2f(10,10);
+    glVertex2f(590,10);
+     glVertex2f(590,10);
+    glVertex2f(590,590);
     glEnd();
-
 
     int a=0;
     for(int i=0;i<=10;i++)
@@ -161,8 +216,7 @@ void display()
         }
 
         glPopMatrix();
-        a=a+25;
-
+        a=a+12;
     }
 
     glFlush();
@@ -176,8 +230,7 @@ int main(int argc, char** argv)
     glutCreateWindow("Snake");
     glutDisplayFunc(display);
     init();
-    //glutKeyboardFunc(handleKeypress);
-    //glutMouseFunc(handleMouse);
+
     glutSpecialFunc(SpecialFunc);
     glutTimerFunc(0, update, 0);
     glutMainLoop();
