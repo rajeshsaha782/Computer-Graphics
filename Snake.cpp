@@ -6,8 +6,9 @@
 #include<string.h>
 
 using namespace std;
+
 string direction="right";
-GLint position=0,speed=10;
+GLint  positionX=0,positionY=0,speed=10;
 int snake_size[10];
 
 
@@ -19,29 +20,64 @@ void init()
 void update(int value)
 {
 
-    if(position >= 650)
-        position = -600;
+    if( positionX >= 650)
+         positionX = -600;
+    else if( positionX <= -650)
+         positionX = 600;
 
-    position += speed;
+    else if( positionY >= 650)
+         positionY = -600;
+    else if( positionY <= -650)
+         positionY = 600;
+
+    if(direction=="right")
+    {
+         positionX += speed;
+    }
+    else if(direction=="left")
+    {
+         positionX -= speed;
+    }
+    else if(direction=="top")
+    {
+         positionY += speed;
+    }
+    else if(direction=="bottom")
+    {
+         positionY -= speed;
+    }
+
 
     glutPostRedisplay();
 
 
-    glutTimerFunc(100, update, 0);
+    glutTimerFunc(1000, update, 0);
 }
 void SpecialFunc(int key, int x, int y)
 {
-    if(direction=="right")
+    if(direction=="right" || direction=="left")
     {
         if(key == GLUT_KEY_UP)
         {
-            direction="";
+            direction="top";
         }
         else if(key == GLUT_KEY_DOWN)
         {
             direction="bottom";
         }
     }
+    else if(direction=="top" || direction=="bottom")
+    {
+        if(key == GLUT_KEY_RIGHT)
+        {
+            direction="right";
+        }
+        else if(key == GLUT_KEY_LEFT)
+        {
+            direction="left";
+        }
+    }
+
 
 }
 void Right(int a)
@@ -54,7 +90,17 @@ void Right(int a)
     glVertex2f(0-a,20);
     glEnd();
 }
-void Bottom(int a)
+void Left(int a)
+{
+   glBegin(GL_QUADS);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2f(0+a,0);
+    glVertex2f(20+a,0);
+    glVertex2f(20+a,20);
+    glVertex2f(0+a,20);
+    glEnd();
+}
+void Top(int a)
 {
    glBegin(GL_QUADS);
     glColor3f(1.0f, 0.0f, 0.0f);
@@ -62,6 +108,16 @@ void Bottom(int a)
     glVertex2f(20,0-a);
     glVertex2f(20,20-a);
     glVertex2f(0,20-a);
+    glEnd();
+}
+void Bottom(int a)
+{
+   glBegin(GL_QUADS);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex2f(0,0+a);
+    glVertex2f(20,0+a);
+    glVertex2f(20,20+a);
+    glVertex2f(0,20+a);
     glEnd();
 }
 void display()
@@ -72,10 +128,18 @@ void display()
     {
 
        glPushMatrix();
-        glTranslatef(position,0.0f, 0.0f);
+        glTranslatef( positionX,positionY, 0.0f);
         if(direction=="right")
         {
-          Right(a);
+            Right(a);
+        }
+        else if(direction=="left")
+        {
+            Left(a);
+        }
+        else if(direction=="top")
+        {
+            Top(a);
         }
         else if(direction=="bottom")
         {
@@ -84,6 +148,7 @@ void display()
 
         glPopMatrix();
         a=a+25;
+
     }
 
     glFlush();
