@@ -12,7 +12,7 @@ string direction="right";
 GLint  positionX=0,positionY=0,speed=10;
 int Rx,Ry,snake_size=3,score=0,bonusPoint=50;
 bool visited=false,status=false;
-
+int winSize=290;
 
 
 int random(int min, int max) //range : [min, max)
@@ -29,9 +29,9 @@ int random(int min, int max) //range : [min, max)
 void init()
 {
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glOrtho(0.0, 400.0, 0.0, 400.0, -1.0, 1.0);
-    Rx=random(20,380);
-    Ry=random(20,380);
+    glOrtho(0.0, 300.0, 0.0, 300.0, -1.0, 1.0);
+    Rx=random(20,winSize-10);
+    Ry=random(20,winSize-10);
     Rx=Rx-(Rx%10);
     Ry=Ry-(Ry%10);
     cout<<"\t\tSCORE:"<<score<<endl;
@@ -39,8 +39,8 @@ void init()
 
 void RandomPoints()
 {
-     Rx=random(20,380);
-     Ry=random(20,380);
+     Rx=random(20,winSize-10);
+     Ry=random(20,winSize-10);
      Rx=Rx-(Rx%10);
      Ry=Ry-(Ry%10);
      visited=false;
@@ -137,7 +137,7 @@ void update(int value)
 
 void Check_border()
 {
-    if(positionX>=390 || positionX<10|| positionY>=380 ||positionY<=-10)
+    if(positionX>=winSize || positionX<10|| positionY>=winSize-10 ||positionY<=-10)
     {
         speed =0;
         if(!status)
@@ -213,14 +213,14 @@ void display()
     glColor3f(1.0f, 0.0f, 0.0f);
 
     glBegin(GL_LINES);
-    glVertex2f(10,390);
-    glVertex2f(390,390);
-    glVertex2f(10,390);
+    glVertex2f(10,winSize);
+    glVertex2f(winSize,winSize);
+    glVertex2f(10,winSize);
     glVertex2f(10,10);
      glVertex2f(10,10);
-    glVertex2f(390,10);
-     glVertex2f(390,10);
-    glVertex2f(390,390);
+    glVertex2f(winSize,10);
+     glVertex2f(winSize,10);
+    glVertex2f(winSize,winSize);
     glEnd();
 
 
@@ -314,8 +314,8 @@ void MENU(int x)
         visited=false,status=false;
         bonusPoint=50;
 
-        Rx=random(20,380);
-        Ry=random(20,380);
+        Rx=random(20,winSize-10);
+        Ry=random(20,winSize-10);
         Rx=Rx-(Rx%10);
         Ry=Ry-(Ry%10);
 
