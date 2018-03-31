@@ -1,7 +1,7 @@
 #include<windows.h>
-#include <stdlib.h>
 #include<iostream>
-#include<cstdio>
+#include <fstream>
+#include <sstream>
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <time.h>
@@ -10,7 +10,7 @@ using namespace std;
 
 string direction="right";
 GLint  positionX=0,positionY=0,speed=10;
-int Rx,Ry,snake_size=3,score=0,bonusPoint=50;
+int Rx,Ry,snake_size=3,score=0,Highscore=0,bonusPoint=50;
 bool visited=false,status=false;
 int winSize=290;
 
@@ -25,6 +25,30 @@ int random(int min, int max) //range : [min, max)
    }
    return min + rand() % (( max + 1 ) - min);
 }
+string int_to_str(int num)
+{
+    stringstream ss;
+
+    ss << num;
+
+    return ss.str();
+}
+void File_write()
+{
+    ofstream outfile;
+   outfile.open("Highscore.txt");
+   outfile << int_to_str(Highscore) << endl;
+   outfile.close();
+}
+void File_read()
+{
+    ifstream infile;
+   infile.open("Highscore.txt");
+   int data;
+   infile >> data;
+   Highscore=data;
+   infile.close();
+}
 
 void init()
 {
@@ -34,6 +58,7 @@ void init()
     Ry=random(20,winSize-10);
     Rx=Rx-(Rx%10);
     Ry=Ry-(Ry%10);
+    File_read();
     cout<<"\t\tSCORE:"<<score<<endl;
 }
 
@@ -50,7 +75,6 @@ void RandomPoints()
 void RandomBox()
 {
 
-
     if(bonusPoint%2==0 && status==false)
     {
         glColor3f(0.0f, 1.0f, 0.0f);
@@ -59,7 +83,7 @@ void RandomBox()
     {
         glColor3f(0.0f, 0.5f, 0.5f);
     }
-    glutSolidSphere(.2,30,30);
+
     glBegin(GL_QUADS);
     glVertex2f(Rx,Ry);
     glVertex2f(Rx+10,Ry);
@@ -70,7 +94,8 @@ void RandomBox()
 
       if(positionX==Rx && positionY+10==Ry)
         {
-            PlaySound("Tick.wav", NULL, SND_NOWAIT);
+            //PlaySound("Tick.wav", NULL, SND_FILENAME);
+            PlaySound("drip.wav", NULL, SND_FILENAME);
            //cout<<"X:"<<Rx<<" positionX:"<<positionX<<endl;
            //cout<<"Y:"<<Ry<<" positionY:"<<positionY<<endl;
            visited=true;snake_size++;
@@ -143,12 +168,18 @@ void Check_border()
         if(!status)
         {
             system("cls");
-
-            cout<<"\n***********GAME OVER************"<<endl;
-            cout<<"**************Your Score:"<<score<<"**************"<<endl;
+            cout<<"\n\t\t***********GAME OVER************"<<endl;
+            if(score>Highscore)
+            {
+                File_write();
+                Highscore=score;
+                cout<<"**************Congratulation!!!Your make a new High score.**************"<<endl;
+            }
+            cout<<"\t**************Your Score:"<<score<<"**************"<<endl;
             cout<<"Check Point->"<<positionX<<","<<positionY<<endl;
             status=true;
-            PlaySound("Untitled 2_2.wav", NULL, SND_SYNC);
+
+            PlaySound("noooh_2.wav", NULL, SND_SYNC);
         }
 
 
@@ -301,10 +332,12 @@ void MENU(int x)
     if(x==1)//play
     {
        speed=10;
+       PlaySound("unpause.wav", NULL, SND_SYNC);
 	}
 	else if(x==0)//pause
 	{
 	    speed=0;
+	    PlaySound("pause.wav", NULL, SND_SYNC);
 	}
 	else if(x==2)//restart
 	{
@@ -312,7 +345,7 @@ void MENU(int x)
         positionX=10,positionY=10,speed=10;
         snake_size=3,score=0;
         visited=false,status=false;
-        bonusPoint=50;
+        bonusPoint=50;File_read();
 
         Rx=random(20,winSize-10);
         Ry=random(20,winSize-10);
@@ -322,6 +355,11 @@ void MENU(int x)
         system("cls");
         cout<<"\t\tSCORE:"<<score<<endl;
 	}
+	else if(x==3)//high score
+    {
+        cout<<"\n*****HighScore:"<<Highscore<<"*****"<<endl;
+        speed=0;
+    }
 
     glutPostRedisplay();
 }
@@ -340,10 +378,11 @@ int main(int argc, char** argv)
     glutAddMenuEntry("Pause",0);
     glutAddMenuEntry("Play",1);
     glutAddMenuEntry("Restart",2);
+    glutAddMenuEntry("High score",3);
     //glutAddMenuEntry("Stop",4);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 
-    glutTimerFunc(0, update, 0);
+    glutTimerFunc(0, update, 100);
     glutMainLoop();
     return 0;
 }
