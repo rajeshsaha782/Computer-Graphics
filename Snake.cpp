@@ -10,7 +10,7 @@ using namespace std;
 
 string direction="right";
 GLint  positionX=0,positionY=0,speed=10;
-int Rx,Ry,snake_size=1,score=0;
+int Rx,Ry,snake_size=3,score=0,bonusPoint=50;
 bool visited=false,status=false;
 
 
@@ -28,27 +28,29 @@ int random(int min, int max) //range : [min, max)
 
 void init()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glOrtho(0.0, 600.0, 0.0, 600.0, -1.0, 1.0);
-    Rx=random(30,550);
-    Ry=random(30,550);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glOrtho(0.0, 500.0, 0.0, 500.0, -1.0, 1.0);
+    Rx=random(20,490);
+    Ry=random(20,490);
     Rx=Rx-(Rx%10);
     Ry=Ry-(Ry%10);
+    cout<<"\t\tSCORE:"<<score<<endl;
 }
 
 void RandomPoints()
 {
-     Rx=random(30,550);
-     Ry=random(30,550);
+     Rx=random(20,490);
+     Ry=random(20,490);
      Rx=Rx-(Rx%10);
      Ry=Ry-(Ry%10);
      visited=false;
+     bonusPoint=50;
 }
 
 void RandomBox()
 {
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 0.0f, 1.0f);
+    glColor3f(0.0f, 1.0f, 0.0f);
     glVertex2f(Rx,Ry);
     glVertex2f(Rx+10,Ry);
     glVertex2f(Rx+10,Ry+10);
@@ -58,10 +60,21 @@ void RandomBox()
 
       if(positionX==Rx && positionY+10==Ry)
         {
-           cout<<"X:"<<Rx<<" positionX:"<<positionX<<endl;
-           cout<<"Y:"<<Ry<<" positionY:"<<positionY<<endl;
-           visited=true;snake_size++;score++;
-           //speed=0;
+
+           //cout<<"X:"<<Rx<<" positionX:"<<positionX<<endl;
+           //cout<<"Y:"<<Ry<<" positionY:"<<positionY<<endl;
+           visited=true;snake_size++;
+           if(bonusPoint>0)
+           {
+               score=score+bonusPoint;
+           }
+           else
+           {
+              score++;
+           }
+
+            system("cls");
+            cout<<"\t\tSCORE:"<<score<<" +"<<bonusPoint<<endl;
         }
 
     //cout<<"X:"<<Rx<<"Y:"<<Ry<<endl;
@@ -97,7 +110,12 @@ void update(int value)
          positionY -= speed;
     }
 
+    if(bonusPoint!=0)
+    {
+        bonusPoint--;
+    }
 
+    //cout<<bonusPoint<<endl;
     glutPostRedisplay();
 
 
@@ -134,14 +152,16 @@ void SpecialFunc(int key, int x, int y)
 
 void Check_border()
 {
-    if(positionX>=590 || positionX<10|| positionY>=580 ||positionY<=-10)
+    if(positionX>=490 || positionX<10|| positionY>=480 ||positionY<=-10)
     {
         speed =0;
         if(!status)
         {
-            cout<<"Check->"<<positionX<<","<<positionY<<endl;
-            cout<<"***********GAME OVER************"<<endl;
+            system("cls");
+            //PlaySound("snakehit2.wav", NULL, SND_FILENAME);
+            cout<<"\n***********GAME OVER************"<<endl;
             cout<<"**************Your Score:"<<score<<"**************"<<endl;
+            cout<<"Check Point->"<<positionX<<","<<positionY<<endl;
             status=true;
         }
 
@@ -204,26 +224,24 @@ void display()
     }
     RandomBox();
 
-      glBegin(GL_LINES);
     glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(10,590);
-    glVertex2f(590,590);
-    glVertex2f(10,590);
+
+    glBegin(GL_LINES);
+    glVertex2f(10,490);
+    glVertex2f(490,490);
+    glVertex2f(10,490);
     glVertex2f(10,10);
      glVertex2f(10,10);
-    glVertex2f(590,10);
-     glVertex2f(590,10);
-    glVertex2f(590,590);
+    glVertex2f(490,10);
+     glVertex2f(490,10);
+    glVertex2f(490,490);
     glEnd();
+
+
 
     int a=0;
     for(int i=0;i<snake_size;i++)
     {
-        if(i==0)
-        {
-            Check_border();
-
-        }
         if(i%2==0)
         {
             glColor3f(1.0f, 1.0f, 0.0f);
@@ -233,8 +251,15 @@ void display()
             glColor3f(1.0f, 0.0f, 0.0f);
         }
 
+        if(i==0)//Head
+        {
+            Check_border();
+            glColor3f(0.0f, 0.0f, 1.0f);//head color
+        }
+
+
        glPushMatrix();
-        glTranslatef( positionX,positionY, 0.0f);
+        glTranslatef(positionX,positionY, 0.0f);
         if(direction=="right")
         {
             Right(a);
@@ -258,7 +283,34 @@ void display()
 
     glFlush();
 }
+void MENU(int x)
+{
+    if(x==1)//play
+    {
+       speed=10;
+	}
+	else if(x==0)//pause
+	{
+	    speed=0;
+	}
+	else if(x==2)//restart
+	{
+	    direction="right";
+        positionX=10,positionY=10,speed=10;
+        snake_size=3,score=0;
+        visited=false,status=false;
 
+        Rx=random(20,490);
+        Ry=random(20,490);
+        Rx=Rx-(Rx%10);
+        Ry=Ry-(Ry%10);
+
+        system("cls");
+        cout<<"\t\tSCORE:"<<score<<endl;
+	}
+
+    glutPostRedisplay();
+}
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
@@ -269,6 +321,14 @@ int main(int argc, char** argv)
     init();
 
     glutSpecialFunc(SpecialFunc);
+
+    glutCreateMenu(MENU);
+    glutAddMenuEntry("Pause",0);
+    glutAddMenuEntry("Play",1);
+    glutAddMenuEntry("Restart",2);
+    //glutAddMenuEntry("Stop",4);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+
     glutTimerFunc(0, update, 0);
     glutMainLoop();
     return 0;
