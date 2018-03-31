@@ -29,9 +29,9 @@ int random(int min, int max) //range : [min, max)
 void init()
 {
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glOrtho(0.0, 500.0, 0.0, 500.0, -1.0, 1.0);
-    Rx=random(20,480);
-    Ry=random(20,480);
+    glOrtho(0.0, 400.0, 0.0, 400.0, -1.0, 1.0);
+    Rx=random(20,380);
+    Ry=random(20,380);
     Rx=Rx-(Rx%10);
     Ry=Ry-(Ry%10);
     cout<<"\t\tSCORE:"<<score<<endl;
@@ -39,8 +39,8 @@ void init()
 
 void RandomPoints()
 {
-     Rx=random(20,480);
-     Ry=random(20,480);
+     Rx=random(20,380);
+     Ry=random(20,380);
      Rx=Rx-(Rx%10);
      Ry=Ry-(Ry%10);
      visited=false;
@@ -49,8 +49,18 @@ void RandomPoints()
 
 void RandomBox()
 {
+
+
+    if(bonusPoint%2==0 && status==false)
+    {
+        glColor3f(0.0f, 1.0f, 0.0f);
+    }
+    else
+    {
+        glColor3f(0.0f, 0.5f, 0.5f);
+    }
+    glutSolidSphere(.2,30,30);
     glBegin(GL_QUADS);
-    glColor3f(0.0f, 1.0f, 0.0f);
     glVertex2f(Rx,Ry);
     glVertex2f(Rx+10,Ry);
     glVertex2f(Rx+10,Ry+10);
@@ -127,7 +137,7 @@ void update(int value)
 
 void Check_border()
 {
-    if(positionX>=490 || positionX<10|| positionY>=480 ||positionY<=-10)
+    if(positionX>=390 || positionX<10|| positionY>=380 ||positionY<=-10)
     {
         speed =0;
         if(!status)
@@ -203,14 +213,14 @@ void display()
     glColor3f(1.0f, 0.0f, 0.0f);
 
     glBegin(GL_LINES);
-    glVertex2f(10,490);
-    glVertex2f(490,490);
-    glVertex2f(10,490);
+    glVertex2f(10,390);
+    glVertex2f(390,390);
+    glVertex2f(10,390);
     glVertex2f(10,10);
      glVertex2f(10,10);
-    glVertex2f(490,10);
-     glVertex2f(490,10);
-    glVertex2f(490,490);
+    glVertex2f(390,10);
+     glVertex2f(390,10);
+    glVertex2f(390,390);
     glEnd();
 
 
@@ -302,9 +312,10 @@ void MENU(int x)
         positionX=10,positionY=10,speed=10;
         snake_size=3,score=0;
         visited=false,status=false;
+        bonusPoint=50;
 
-        Rx=random(20,480);
-        Ry=random(20,480);
+        Rx=random(20,380);
+        Ry=random(20,380);
         Rx=Rx-(Rx%10);
         Ry=Ry-(Ry%10);
 
@@ -318,7 +329,7 @@ int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitWindowSize(600, 600);
-    glutInitWindowPosition(350, 50);
+    glutInitWindowPosition(400, 50);
     glutCreateWindow("Snake");
     glutDisplayFunc(display);
     init();
