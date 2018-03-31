@@ -5,7 +5,7 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <time.h>
-
+#include<MMsystem.h>
 using namespace std;
 
 string direction="right";
@@ -30,8 +30,8 @@ void init()
 {
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glOrtho(0.0, 500.0, 0.0, 500.0, -1.0, 1.0);
-    Rx=random(20,490);
-    Ry=random(20,490);
+    Rx=random(20,480);
+    Ry=random(20,480);
     Rx=Rx-(Rx%10);
     Ry=Ry-(Ry%10);
     cout<<"\t\tSCORE:"<<score<<endl;
@@ -39,8 +39,8 @@ void init()
 
 void RandomPoints()
 {
-     Rx=random(20,490);
-     Ry=random(20,490);
+     Rx=random(20,480);
+     Ry=random(20,480);
      Rx=Rx-(Rx%10);
      Ry=Ry-(Ry%10);
      visited=false;
@@ -60,7 +60,7 @@ void RandomBox()
 
       if(positionX==Rx && positionY+10==Ry)
         {
-
+            PlaySound("Tick.wav", NULL, SND_NOWAIT);
            //cout<<"X:"<<Rx<<" positionX:"<<positionX<<endl;
            //cout<<"Y:"<<Ry<<" positionY:"<<positionY<<endl;
            visited=true;snake_size++;
@@ -75,6 +75,7 @@ void RandomBox()
 
             system("cls");
             cout<<"\t\tSCORE:"<<score<<" +"<<bonusPoint<<endl;
+
         }
 
     //cout<<"X:"<<Rx<<"Y:"<<Ry<<endl;
@@ -122,33 +123,7 @@ void update(int value)
     glutTimerFunc(100, update, 0);
 }
 
-void SpecialFunc(int key, int x, int y)
-{
-    if(direction=="right" || direction=="left")
-    {
-        if(key == GLUT_KEY_UP)
-        {
-            direction="top";
-        }
-        else if(key == GLUT_KEY_DOWN)
-        {
-            direction="bottom";
-        }
-    }
-    else if(direction=="top" || direction=="bottom")
-    {
-        if(key == GLUT_KEY_RIGHT)
-        {
-            direction="right";
-        }
-        else if(key == GLUT_KEY_LEFT)
-        {
-            direction="left";
-        }
-    }
 
-
-}
 
 void Check_border()
 {
@@ -158,11 +133,12 @@ void Check_border()
         if(!status)
         {
             system("cls");
-            //PlaySound("snakehit2.wav", NULL, SND_FILENAME);
+
             cout<<"\n***********GAME OVER************"<<endl;
             cout<<"**************Your Score:"<<score<<"**************"<<endl;
             cout<<"Check Point->"<<positionX<<","<<positionY<<endl;
             status=true;
+            PlaySound("Untitled 2_2.wav", NULL, SND_SYNC);
         }
 
 
@@ -283,6 +259,33 @@ void display()
 
     glFlush();
 }
+void SpecialFunc(int key, int x, int y)
+{
+    if(direction=="right" || direction=="left")
+    {
+        if(key == GLUT_KEY_UP)
+        {
+            direction="top";
+        }
+        else if(key == GLUT_KEY_DOWN)
+        {
+            direction="bottom";
+        }
+    }
+    else if(direction=="top" || direction=="bottom")
+    {
+        if(key == GLUT_KEY_RIGHT)
+        {
+            direction="right";
+        }
+        else if(key == GLUT_KEY_LEFT)
+        {
+            direction="left";
+        }
+    }
+
+
+}
 void MENU(int x)
 {
     if(x==1)//play
@@ -300,8 +303,8 @@ void MENU(int x)
         snake_size=3,score=0;
         visited=false,status=false;
 
-        Rx=random(20,490);
-        Ry=random(20,490);
+        Rx=random(20,480);
+        Ry=random(20,480);
         Rx=Rx-(Rx%10);
         Ry=Ry-(Ry%10);
 
