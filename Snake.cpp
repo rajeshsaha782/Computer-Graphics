@@ -37,7 +37,7 @@ void File_write()
 {
     ofstream outfile;
    outfile.open("Highscore.txt");
-   outfile << int_to_str(Highscore) << endl;
+   outfile <<Highscore<< endl;
    outfile.close();
 }
 void File_read()
@@ -366,6 +366,7 @@ void MENU(int x)
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGB);
     glutInitWindowSize(600, 600);
     glutInitWindowPosition(400, 50);
     glutCreateWindow("Snake");
