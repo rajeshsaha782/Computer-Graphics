@@ -5,7 +5,7 @@
 #include<iostream>
 using namespace std;
 GLint y=0;
-GLint lowerCar1 =0,lowerCar2 =300,upperCar1=300,upperCar2=100;
+GLint lowerCar1 =0,lowerCar2 =300,upperCar1=300,upperCar2=100,cloud1=0,cloud2=0;;
 GLint speed = 10;
 int carx=300,suny=0;
 int environmentMode=0;
@@ -31,6 +31,16 @@ void update(int value)
         upperCar2 =660;
     }
 
+    if(cloud1<-300)
+    {
+        cloud1 =660;
+    }
+    if(cloud2<-600)
+    {
+        cloud2 =300;
+    }
+
+    cloud1 -= 2;cloud2 -= 5;
     upperCar1 -= speed;
     upperCar2 -= speed;
     lowerCar1 += speed;
@@ -38,7 +48,7 @@ void update(int value)
     carx=lowerCar1;
 
     //printf("%d\n",lowerCar1);
-
+   // cout<<cloud1<<endl;
     glutPostRedisplay();
 
     glutTimerFunc(100, update, 0);
@@ -159,7 +169,7 @@ void drawSun(GLfloat x, GLfloat y, GLfloat radius)
     glLineWidth(5.0);
 
     glBegin(GL_LINES);
-    glColor3f(1.0, .84, 0.0);
+    glColor3f(1.0, .8, 0.0);
     for(i = 0; i <= triangleAmount; i++)
     {
         glVertex2f( x, y);
@@ -168,6 +178,170 @@ void drawSun(GLfloat x, GLfloat y, GLfloat radius)
 }
 
 
+void LowerCar1()
+{
+       glPushMatrix();
+    glTranslatef(lowerCar1,0,0);
+
+    glBegin(GL_POLYGON);
+    glColor3f(.52,.76,.91);
+
+    glVertex2f(300,120);   ///carx=300;
+    glVertex2f(370,120);  ///carx=370;
+    glVertex2f(370,130);    ///carx=370;
+    glVertex2f(355,130);    ///carx=355;
+    glVertex2f(340,140);    ///carx=340;
+    glVertex2f(320,140);    ///carx=320;
+    glVertex2f(310,130);    ///carx=310;
+    glVertex2f(300,130);    ///carx=300;
+    glEnd();
+
+     glColor3f(.52,.76,.91);
+    drawCircle(302,125,4);
+    drawCircle(368,125,4);
+
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(352,130);
+    glVertex2f(340,138);
+    glVertex2f(322,138);
+    glVertex2f(313,130);
+
+    glEnd();
+
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    drawCarCircle(320,120,5);    ///carx=320;
+    drawCarCircle(350,120,5);    ///carx=350;
+
+    glPopMatrix();
+}
+
+void LowerCar2()
+{
+     glPushMatrix();
+    glTranslatef(lowerCar2,0,0);
+
+    glBegin(GL_POLYGON);
+    glColor3f(.32,.36,.91);
+
+    glVertex2f(300+100,120);   ///carx=300;
+    glVertex2f(370+100,120);  ///carx=370;
+    glVertex2f(370+100,130);    ///carx=370;
+    glVertex2f(355+100,130);    ///carx=355;
+    glVertex2f(340+100,140);    ///carx=340;
+    glVertex2f(320+100,140);    ///carx=320;
+    glVertex2f(310+100,130);    ///carx=310;
+    glVertex2f(300+100,130);    ///carx=300;
+    glEnd();
+
+    glColor3f(.32,.36,.91);
+    drawCircle(402,125,4);
+    drawCircle(468,125,4);
+
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(452,130);
+    glVertex2f(440,138);
+    glVertex2f(422,138);
+    glVertex2f(413,130);
+    glEnd();
+
+    glColor4f(0.7, 0.6, 0.7, 1.0);
+    drawCarCircle(320+100,120,5);    ///carx=320;
+    drawCarCircle(350+100,120,5);    ///carx=350;
+
+    glPopMatrix();
+
+}
+
+
+void UpperCar1()
+{
+    glPushMatrix();
+    glTranslatef(upperCar1,0,0);
+
+    glBegin(GL_POLYGON);
+    //glColor3f(.52,.76,.91);
+    glColor3f(.92,.36,.31);
+
+    glVertex2f(300,160);
+    glVertex2f(370,160);
+    glVertex2f(370,170);
+    glVertex2f(364,170);//4
+    glVertex2f(350,180);
+    glVertex2f(330,180);
+    glVertex2f(310,170);
+    glVertex2f(300,170);
+    glEnd();
+
+    glColor3f(.92,.36,.31);
+    drawCircle(302,165,4);
+    drawCircle(368,165,4);
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(359,170);
+    glVertex2f(346,179);
+    glVertex2f(332,179);
+    glVertex2f(316,170);
+
+    glEnd();
+
+    glColor4f(0.5, 0.7, 0.6, 1.0);
+    drawCarCircle(320,160,5);
+    drawCarCircle(350,160,5);
+
+    glPopMatrix();
+}
+
+void UpperCar2()
+{
+    ///upper car 2
+
+    glPushMatrix();
+    glTranslatef(upperCar2,0,0);
+
+    glBegin(GL_POLYGON);
+    //glColor3f(.52,.76,.91);
+    glColor3f(.02,.06,.91);
+
+    glVertex2f(300-200,160);
+    glVertex2f(370-200,160);
+    glVertex2f(370-200,170);
+    glVertex2f(364-200,170);//4
+    glVertex2f(350-200,180);
+    glVertex2f(330-200,180);
+    glVertex2f(310-200,170);
+    glVertex2f(300-200,170);
+    glEnd();
+
+    glColor3f(.02,.06,.91);
+    drawCircle(302-200,165,4);
+    drawCircle(368-200,165,4);
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(359-200,170);
+    glVertex2f(346-200,179);
+    glVertex2f(332-200,179);
+    glVertex2f(316-200,170);
+
+    glEnd();
+
+    glColor4f(0.5, 0.7, 0.6, 1.0);
+    drawCarCircle(320-200,160,5);
+    drawCarCircle(350-200,160,5);
+
+    glPopMatrix();
+
+
+}
 
 void display()
 {
@@ -235,7 +409,7 @@ void display()
     for(int i=0; i<20; i++)
     {
         glBegin(GL_LINES);
-        glColor3f(0,1,1);
+        glColor3f(1,1,0.3);
         glVertex2f(x1,150);
         glVertex2f(y1,150);
         x1+=50;
@@ -290,159 +464,14 @@ void display()
         glEnd();
     }
 
-    /// Car
-    glPushMatrix();
-    glTranslatef(lowerCar1,0,0);
+    ///Lower Car
+    LowerCar1();
+    LowerCar2();
 
-    glBegin(GL_POLYGON);
-    glColor3f(.52,.76,.91);
+    ///upper car
 
-    glVertex2f(300,120);   ///carx=300;
-    glVertex2f(370,120);  ///carx=370;
-    glVertex2f(370,130);    ///carx=370;
-    glVertex2f(355,130);    ///carx=355;
-    glVertex2f(340,140);    ///carx=340;
-    glVertex2f(320,140);    ///carx=320;
-    glVertex2f(310,130);    ///carx=310;
-    glVertex2f(300,130);    ///carx=300;
-    glEnd();
-
-     glColor3f(.52,.76,.91);
-    drawCircle(302,125,4);
-    drawCircle(368,125,4);
-
-
-    glBegin(GL_POLYGON);///glass
-    glColor3f(0,0,0);
-
-    glVertex2f(352,130);
-    glVertex2f(340,138);
-    glVertex2f(322,138);
-    glVertex2f(313,130);
-
-    glEnd();
-
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    drawCarCircle(320,120,5);    ///carx=320;
-    drawCarCircle(350,120,5);    ///carx=350;
-
-    glPopMatrix();
-
-
-    glPushMatrix();
-    glTranslatef(lowerCar2,0,0);
-
-    glBegin(GL_POLYGON);
-    glColor3f(.32,.36,.91);
-
-    glVertex2f(300+100,120);   ///carx=300;
-    glVertex2f(370+100,120);  ///carx=370;
-    glVertex2f(370+100,130);    ///carx=370;
-    glVertex2f(355+100,130);    ///carx=355;
-    glVertex2f(340+100,140);    ///carx=340;
-    glVertex2f(320+100,140);    ///carx=320;
-    glVertex2f(310+100,130);    ///carx=310;
-    glVertex2f(300+100,130);    ///carx=300;
-    glEnd();
-
-    glColor3f(.32,.36,.91);
-    drawCircle(402,125,4);
-    drawCircle(468,125,4);
-
-
-    glBegin(GL_POLYGON);///glass
-    glColor3f(0,0,0);
-
-    glVertex2f(452,130);
-    glVertex2f(440,138);
-    glVertex2f(422,138);
-    glVertex2f(413,130);
-    glEnd();
-
-    glColor4f(0.7, 0.6, 0.7, 1.0);
-    drawCarCircle(320+100,120,5);    ///carx=320;
-    drawCarCircle(350+100,120,5);    ///carx=350;
-
-    glPopMatrix();
-
-
-    ///upper car 1
-
-    glPushMatrix();
-    glTranslatef(upperCar1,0,0);
-
-    glBegin(GL_POLYGON);
-    //glColor3f(.52,.76,.91);
-    glColor3f(.92,.36,.31);
-
-    glVertex2f(300,160);
-    glVertex2f(370,160);
-    glVertex2f(370,170);
-    glVertex2f(364,170);//4
-    glVertex2f(350,180);
-    glVertex2f(330,180);
-    glVertex2f(310,170);
-    glVertex2f(300,170);
-    glEnd();
-
-    glColor3f(.92,.36,.31);
-    drawCircle(302,165,4);
-    drawCircle(368,165,4);
-
-    glBegin(GL_POLYGON);///glass
-    glColor3f(0,0,0);
-
-    glVertex2f(359,170);
-    glVertex2f(346,179);
-    glVertex2f(332,179);
-    glVertex2f(316,170);
-
-    glEnd();
-
-    glColor4f(0.5, 0.7, 0.6, 1.0);
-    drawCarCircle(320,160,5);
-    drawCarCircle(350,160,5);
-
-    glPopMatrix();
-
-    ///upper car 2
-
-    glPushMatrix();
-    glTranslatef(upperCar2,0,0);
-
-    glBegin(GL_POLYGON);
-    //glColor3f(.52,.76,.91);
-    glColor3f(.02,.06,.91);
-
-    glVertex2f(300-200,160);
-    glVertex2f(370-200,160);
-    glVertex2f(370-200,170);
-    glVertex2f(364-200,170);//4
-    glVertex2f(350-200,180);
-    glVertex2f(330-200,180);
-    glVertex2f(310-200,170);
-    glVertex2f(300-200,170);
-    glEnd();
-
-    glColor3f(.02,.06,.91);
-    drawCircle(302-200,165,4);
-    drawCircle(368-200,165,4);
-
-    glBegin(GL_POLYGON);///glass
-    glColor3f(0,0,0);
-
-    glVertex2f(359-200,170);
-    glVertex2f(346-200,179);
-    glVertex2f(332-200,179);
-    glVertex2f(316-200,170);
-
-    glEnd();
-
-    glColor4f(0.5, 0.7, 0.6, 1.0);
-    drawCarCircle(320-200,160,5);
-    drawCarCircle(350-200,160,5);
-
-    glPopMatrix();
+    UpperCar1();
+    UpperCar2();
 
 
 
@@ -456,6 +485,31 @@ void display()
     glVertex2f(760,380);
     glVertex2f(0,380);
     glEnd();
+
+     ///sun
+    glPushMatrix();
+    glTranslatef(0,suny,0);
+    drawSun(100,360,10);
+    glEnd();
+    glPopMatrix();
+
+     ///cloud1
+    glPushMatrix();
+    glTranslatef(cloud1,0,0);
+    drawCloud(200,330,15);
+    drawCloud(230,330,15);
+    drawCloud(215,340,15);
+    drawCloud(215,320,15);
+    glPopMatrix();
+
+    ///cloud2
+    glPushMatrix();
+    glTranslatef(cloud2,0,0);
+    drawCloud(200+400,340,20);
+    drawCloud(230+400,340,20);
+    drawCloud(215+400,350,20);
+    drawCloud(215+400,330,20);
+    glPopMatrix();
 
     ///Building
 
@@ -582,7 +636,7 @@ void display()
     glVertex2f(630,245);
     glVertex2f(600,245);
     glEnd();
-
+    glColor3f(1,0,0);
     drawCircle(615,237,5);
     glBegin(GL_LINES);
     glColor3f(1,1,1);
@@ -590,24 +644,11 @@ void display()
     glVertex2f(630,245);
     glEnd();
 
-    ///sun
-    glPushMatrix();
-    glTranslatef(0,suny,0);
-    drawSun(100,360,10);
-    glEnd();
-    glPopMatrix();
 
-    ///cloud1
-    drawCloud(200,330,15);
-    drawCloud(230,330,15);
-    drawCloud(215,340,15);
-    drawCloud(215,320,15);
 
-    ///cloud2
-    drawCloud(200+400,340,20);
-    drawCloud(230+400,340,20);
-    drawCloud(215+400,350,20);
-    drawCloud(215+400,330,20);
+
+
+
 
 
 ///Hill
@@ -740,6 +781,8 @@ void display()
 
 ///lamp post down
     ///1st lamp
+
+    drawLampPostLight(210,135,3);
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
     glVertex2f(50,100);
@@ -752,6 +795,7 @@ void display()
     glVertex2f(60,140);
     glEnd();
 
+    ///2nd lamp
     drawLampPostLight(60,135,3);
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
@@ -765,10 +809,10 @@ void display()
     glVertex2f(210,140);
     glEnd();
 
-    drawLampPostLight(210,135,3);
+
 
     ///3rd lamp
-
+    drawLampPostLight(410,135,3);
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
     glVertex2f(400,100);
@@ -781,9 +825,10 @@ void display()
     glVertex2f(410,140);
     glEnd();
 
-    drawLampPostLight(410,135,3);
+
 
      ///4th lamp
+     drawLampPostLight(630,135,3);
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
     glVertex2f(620,100);
@@ -796,10 +841,11 @@ void display()
     glVertex2f(630,140);
     glEnd();
 
-    drawLampPostLight(630,135,3);
+
 
 ///upper lamp post
     ///1st lamp
+    drawLampPostLight(80,230,3);
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
     glVertex2f(50+20,100+95);
@@ -812,10 +858,10 @@ void display()
     glVertex2f(60+20,140+95);
     glEnd();
 
-    drawLampPostLight(80,230,3);
+
 
     ///2nd lamp
-
+    drawLampPostLight(230,230,3);
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
     glVertex2f(200+20,100+95);
@@ -828,10 +874,10 @@ void display()
     glVertex2f(210+20,140+95);
     glEnd();
 
-    drawLampPostLight(230,230,3);
+
 
     ///3rd lamp
-
+    drawLampPostLight(430,230,3);
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
     glVertex2f(400+20,100+95);
@@ -844,10 +890,10 @@ void display()
     glVertex2f(410+20,140+95);
     glEnd();
 
-    drawLampPostLight(430,230,3);
+
 
     ///4th lamp
-
+ drawLampPostLight(650,230,3);
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
     glVertex2f(620+20,100+95);
@@ -860,7 +906,7 @@ void display()
     glVertex2f(630+20,140+95);
     glEnd();
 
-    drawLampPostLight(650,230,3);
+
 
 ///draw tree1
 
