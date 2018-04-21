@@ -2,38 +2,42 @@
 #include<windows.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
-
+#include<iostream>
+using namespace std;
 GLint y=0;
-GLint position =0,positioncar2=300;
+GLint lowerCar1 =0,lowerCar2 =300,upperCar1=300,upperCar2=100;
 GLint speed = 10;
 int carx=300,suny=0;
 int environmentMode=0;
 
 void update(int value)
 {
-    if(position>460)
+    if(lowerCar1>460)
     {
-        position =-370;
+        lowerCar1 =-370;
     }
-    else if(position<-370)
+    if(lowerCar2>400)
     {
-        position =460;
-    }
-
-    if(positioncar2>460)
-    {
-        positioncar2 =-370;
-    }
-    else if(positioncar2<-370)
-    {
-        positioncar2 =460;
+        lowerCar2 =-470;
     }
 
-    positioncar2 -= speed;
-    position += speed;
-    carx=position;
+    if(upperCar1<-370)
+    {
+        upperCar1 =460;
+    }
 
-    //printf("%d\n",position);
+    if(upperCar2<-300)
+    {
+        upperCar2 =660;
+    }
+
+    upperCar1 -= speed;
+    upperCar2 -= speed;
+    lowerCar1 += speed;
+    lowerCar2 += speed;
+    carx=lowerCar1;
+
+    //printf("%d\n",lowerCar1);
 
     glutPostRedisplay();
 
@@ -56,7 +60,7 @@ void drawCircle(GLfloat x, GLfloat y, GLfloat radius)
     glLineWidth(5.0);
 
     glBegin(GL_LINES);
-    glColor4f(1.0, 0.0, 0.0, 1.0);
+   // glColor4f(1.0, 0.0, 0.0, 1.0);
     for(i = 0; i <= triangleAmount; i++)
     {
         glVertex2f( x, y);
@@ -76,7 +80,8 @@ void drawLampPostLight(GLfloat x, GLfloat y, GLfloat radius)
     glLineWidth(5.0);
 
     glBegin(GL_LINES);
-    glColor4f(1.000, 0.980, 0.980, 1.0);
+    //glColor4f(1.000, 0.980, 0.980, 1.0);
+    glColor4f(1.000, 1.980, 0.00, 1.0);
     for(i = 0; i <= triangleAmount; i++)
     {
         glVertex2f( x, y);
@@ -95,7 +100,7 @@ void drawCarCircle(GLfloat x, GLfloat y, GLfloat radius)
     glLineWidth(5.0);
 
     glBegin(GL_LINES);
-    glColor4f(1.0, 0.0, 0.0, 1.0);
+
     for(i = 0; i <= triangleAmount; i++)
     {
         glVertex2f( x, y);
@@ -287,7 +292,7 @@ void display()
 
     /// Car
     glPushMatrix();
-    glTranslatef(position,0,0);
+    glTranslatef(lowerCar1,0,0);
 
     glBegin(GL_POLYGON);
     glColor3f(.52,.76,.91);
@@ -302,6 +307,22 @@ void display()
     glVertex2f(300,130);    ///carx=300;
     glEnd();
 
+     glColor3f(.52,.76,.91);
+    drawCircle(302,125,4);
+    drawCircle(368,125,4);
+
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(352,130);
+    glVertex2f(340,138);
+    glVertex2f(322,138);
+    glVertex2f(313,130);
+
+    glEnd();
+
+    glColor4f(1.0, 1.0, 1.0, 1.0);
     drawCarCircle(320,120,5);    ///carx=320;
     drawCarCircle(350,120,5);    ///carx=350;
 
@@ -309,10 +330,10 @@ void display()
 
 
     glPushMatrix();
-    glTranslatef(position,0,0);
+    glTranslatef(lowerCar2,0,0);
 
     glBegin(GL_POLYGON);
-    glColor3f(.52,.76,.91);
+    glColor3f(.32,.36,.91);
 
     glVertex2f(300+100,120);   ///carx=300;
     glVertex2f(370+100,120);  ///carx=370;
@@ -324,34 +345,105 @@ void display()
     glVertex2f(300+100,130);    ///carx=300;
     glEnd();
 
+    glColor3f(.32,.36,.91);
+    drawCircle(402,125,4);
+    drawCircle(468,125,4);
+
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(452,130);
+    glVertex2f(440,138);
+    glVertex2f(422,138);
+    glVertex2f(413,130);
+    glEnd();
+
+    glColor4f(0.7, 0.6, 0.7, 1.0);
     drawCarCircle(320+100,120,5);    ///carx=320;
     drawCarCircle(350+100,120,5);    ///carx=350;
 
     glPopMatrix();
 
 
-    ///upper car
+    ///upper car 1
 
     glPushMatrix();
-    glTranslatef(positioncar2,0,0);
+    glTranslatef(upperCar1,0,0);
 
     glBegin(GL_POLYGON);
-    glColor3f(.52,.76,.91);
+    //glColor3f(.52,.76,.91);
+    glColor3f(.92,.36,.31);
 
     glVertex2f(300,160);
     glVertex2f(370,160);
     glVertex2f(370,170);
-    glVertex2f(360,170);
+    glVertex2f(364,170);//4
     glVertex2f(350,180);
     glVertex2f(330,180);
-    glVertex2f(315,170);
+    glVertex2f(310,170);
     glVertex2f(300,170);
     glEnd();
 
+    glColor3f(.92,.36,.31);
+    drawCircle(302,165,4);
+    drawCircle(368,165,4);
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(359,170);
+    glVertex2f(346,179);
+    glVertex2f(332,179);
+    glVertex2f(316,170);
+
+    glEnd();
+
+    glColor4f(0.5, 0.7, 0.6, 1.0);
     drawCarCircle(320,160,5);
     drawCarCircle(350,160,5);
 
     glPopMatrix();
+
+    ///upper car 2
+
+    glPushMatrix();
+    glTranslatef(upperCar2,0,0);
+
+    glBegin(GL_POLYGON);
+    //glColor3f(.52,.76,.91);
+    glColor3f(.02,.06,.91);
+
+    glVertex2f(300-200,160);
+    glVertex2f(370-200,160);
+    glVertex2f(370-200,170);
+    glVertex2f(364-200,170);//4
+    glVertex2f(350-200,180);
+    glVertex2f(330-200,180);
+    glVertex2f(310-200,170);
+    glVertex2f(300-200,170);
+    glEnd();
+
+    glColor3f(.02,.06,.91);
+    drawCircle(302-200,165,4);
+    drawCircle(368-200,165,4);
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(359-200,170);
+    glVertex2f(346-200,179);
+    glVertex2f(332-200,179);
+    glVertex2f(316-200,170);
+
+    glEnd();
+
+    glColor4f(0.5, 0.7, 0.6, 1.0);
+    drawCarCircle(320-200,160,5);
+    drawCarCircle(350-200,160,5);
+
+    glPopMatrix();
+
 
 
     ///Town Starts
@@ -773,7 +865,7 @@ void display()
 ///draw tree1
 
     glBegin(GL_QUADS);
-    glColor3f(1,1,1);
+    glColor3f(0.6,0.2,0.1);
 
     glVertex2f(53,10);
     glVertex2f(57,10);
@@ -789,7 +881,7 @@ void display()
     ///drawTree 2
 
     glBegin(GL_QUADS);
-    glColor3f(1,1,1);
+    glColor3f(0.6,0.2,0.1);
 
     glVertex2f(53+250,10+10);
     glVertex2f(57+250,10+10);
@@ -805,7 +897,7 @@ void display()
     ///drawTree 3
 
     glBegin(GL_QUADS);
-    glColor3f(1,1,1);
+    glColor3f(0.6,0.2,0.1);
 
     glVertex2f(53+250+150,10);
     glVertex2f(57+250+150,10);
@@ -821,7 +913,7 @@ void display()
     ///drawTree 4
 
     glBegin(GL_QUADS);
-    glColor3f(1,1,1);
+    glColor3f(0.6,0.2,0.1);
 
     glVertex2f(53+250+320,10);
     glVertex2f(57+250+320,10);
@@ -837,7 +929,7 @@ void display()
  ///upper Draw Tree  1
 
     glBegin(GL_QUADS);
-    glColor3f(1,1,1);
+    glColor3f(0.6,0.2,0.1);
 
     glVertex2f(53,10+180);
     glVertex2f(57,10+180);
@@ -853,7 +945,7 @@ void display()
     ///upper Draw Tree 2
 
     glBegin(GL_QUADS);
-    glColor3f(1,1,1);
+    glColor3f(0.6,0.2,0.1);
 
     glVertex2f(53+250,10+180);
     glVertex2f(57+250,10+180);
@@ -869,7 +961,7 @@ void display()
     ///upper Draw Tree 3
 
     glBegin(GL_QUADS);
-    glColor3f(1,1,1);
+    glColor3f(0.6,0.2,0.1);
 
     glVertex2f(53+250+150,10+180);
     glVertex2f(57+250+150,10+180);
@@ -885,7 +977,7 @@ void display()
     ///upper Draw Tree 4
 
     glBegin(GL_QUADS);
-    glColor3f(1,1,1);
+    glColor3f(0.6,0.2,0.1);
 
     glVertex2f(53+250+400,10+180);
     glVertex2f(57+250+400,10+180);
@@ -906,11 +998,11 @@ void handleKeypress(unsigned char key, int x, int y)
 {
     switch (key)
     {
-    case 'o':
+    case 's':
         speed = 0;
         break;
-    case 's':
-        speed = 10;
+    case 'a':
+        speed = speed+10;
         break;
     case 'd':
         if(suny>35)
@@ -930,13 +1022,13 @@ void handleKeypress(unsigned char key, int x, int y)
     {
         environmentMode=0;
     }
-    /*if(position>460)
+    /*if(lowerCar1>460)
     {
-        position =-370;
+        lowerCar1 =-370;
     }
-    else if(position<-370)
+    else if(lowerCar1<-370)
     {
-        position =460;
+        lowerCar1 =460;
     }
     */
         printf("%d\n",suny);
@@ -953,7 +1045,7 @@ int main(int argc, char** argv)
     glutInitWindowPosition(0,0);
     glutCreateWindow("Model Town");
     glutDisplayFunc(display);
-    glutTimerFunc(100, update, 0);
+   glutTimerFunc(100, update, 0);
     glutKeyboardFunc(handleKeypress);
     init();
     glutMainLoop();
