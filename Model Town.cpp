@@ -5,10 +5,13 @@
 #include<iostream>
 using namespace std;
 GLint y=0;
-GLint lowerCar1 =0,lowerCar2 =300,upperCar1=300,upperCar2=100,cloud1=0,cloud2=0;;
+GLint lowerCar1 =0,lowerCar2 =300,upperCar1=300,upperCar2=100,cloud1=0,cloud2=0;
+GLfloat day_night=0;
 GLint speed = 10;
 int carx=300,suny=0;
 int environmentMode=0;
+
+string day="up";
 
 void update(int value)
 {
@@ -40,6 +43,23 @@ void update(int value)
         cloud2 =300;
     }
 
+    if(day=="up")
+    {
+        day_night+=.01;
+        if(day_night>=.6)
+        {
+            day="down";
+        }
+    }
+    else
+    {
+        day_night-=.01;
+        if(day_night<=0.0)
+        {
+            day="up";
+        }
+    }
+
     cloud1 -= 2;cloud2 -= 5;
     upperCar1 -= speed;
     upperCar2 -= speed;
@@ -47,8 +67,9 @@ void update(int value)
     lowerCar2 += speed;
     carx=lowerCar1;
 
+
     //printf("%d\n",lowerCar1);
-   // cout<<cloud1<<endl;
+   cout<<day_night<<endl;
     glutPostRedisplay();
 
     glutTimerFunc(100, update, 0);
@@ -478,7 +499,11 @@ void display()
     ///Town Starts
 
     glBegin(GL_QUADS);
-    glColor3f(.52,.76,.91);
+
+    glColor3f(.52,.76,1-(day_night));
+
+    //glColor3f(.52,.76,.91);
+    //glColor4f(0.5, 0.7, 0.6, 1.0);
 
     glVertex2f(0,200);
     glVertex2f(760,200);
@@ -535,7 +560,7 @@ void display()
         for(int j=0; j<3; j++)
         {
             glBegin(GL_QUADS);
-            glColor3f(.12,.96,1);
+            glColor3f(.92,.96,1-day_night);
 
             glVertex2f(m,l);
             glVertex2f(n,l);
@@ -600,7 +625,7 @@ void display()
         for(int j=0; j<3; j++)
         {
             glBegin(GL_QUADS);
-            glColor3f(.12,.96,1);
+            glColor3f(.92,.96,1-day_night);
 
             glVertex2f(m,l);
             glVertex2f(n,l);
