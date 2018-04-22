@@ -9,7 +9,8 @@ GLint lowerCar1 =0,lowerCar2 =300,lowerCar3 =100,upperCar1=300,upperCar2=100,upp
 GLfloat day_night=0;
 GLint lowerCar1_speed = 8,lowerCar2_speed = 12,lowerCar3_speed = 5,upperCar1_speed = 8,upperCar2_speed = 12,upperCar3_speed = 15;
 int carx=300,suny=0;
-int environmentMode=0;
+bool stop=false;
+
 
 string day="up",Signal="red",VIPsignal="null";
 
@@ -150,12 +151,16 @@ void update(int value)
         else if(Signal=="yellow")
         {
             Signal="green";VIPsignal="null";SignalTime=0;
-            lowerCar1_speed = 8;
-            lowerCar2_speed = 12;
-            lowerCar3_speed = 5;
-            upperCar1_speed = 8;
-            upperCar2_speed = 12;
-            upperCar3_speed = 15;
+            if(stop==false)
+            {
+                lowerCar1_speed = 8;
+                lowerCar2_speed = 12;
+                lowerCar3_speed = 5;
+                upperCar1_speed = 8;
+                upperCar2_speed = 12;
+                upperCar3_speed = 15;
+            }
+
         }
 
     }
@@ -309,6 +314,128 @@ void drawSun(GLfloat x, GLfloat y, GLfloat radius)
         glVertex2f( x, y);
         glVertex2f(x + (radius * cos(i * twicePi / triangleAmount)), y + (radius * sin(i * twicePi / triangleAmount)));
     }
+}
+
+void Star()
+{
+    int x,y;
+        glColor3f(1,1,1);
+        glBegin(GL_POLYGON);
+            glVertex2f(384,362.5);
+            glVertex2f(387,360);
+            glVertex2f(386,364);
+            glVertex2f(389,366);
+            glVertex2f(385,366);
+            glVertex2f(384,369+1);
+            glVertex2f(383,366);
+            glVertex2f(380-.5,366);
+            glVertex2f(382,364);
+            glVertex2f(381,360);
+        glEnd();
+        glBegin(GL_POLYGON);
+        x=30;y=-10;
+            glVertex2f(384+x,362.5+y);
+            glVertex2f(387+x,360+y);
+            glVertex2f(386+x,364+y);
+            glVertex2f(389+x,366+y);
+            glVertex2f(385+x,366+y);
+            glVertex2f(384+x,369+1+y);
+            glVertex2f(383+x,366+y);
+            glVertex2f(380-.5+x,366+y);
+            glVertex2f(382+x,364+y);
+            glVertex2f(381+x,360+y);
+        glEnd();
+        x=0;y=0;
+        for(int i=1;i<=3;i++)
+        {
+            x=x-(30*i);
+            if(i%2==0)
+            {
+                y=y-10;
+            }
+            else
+                y=y+5;
+            glBegin(GL_POLYGON);
+            glVertex2f(384+x,362.5+y);
+            glVertex2f(387+x,360+y);
+            glVertex2f(386+x,364+y);
+            glVertex2f(389+x,366+y);
+            glVertex2f(385+x,366+y);
+            glVertex2f(384+x,369+1+y);
+            glVertex2f(383+x,366+y);
+            glVertex2f(380-.5+x,366+y);
+            glVertex2f(382+x,364+y);
+            glVertex2f(381+x,360+y);
+            glEnd();
+            y=0;
+        }
+
+
+        glBegin(GL_POLYGON);
+        x=-230;y=-5;
+            glVertex2f(384+x,362.5+y);
+            glVertex2f(387+x,360+y);
+            glVertex2f(386+x,364+y);
+            glVertex2f(389+x,366+y);
+            glVertex2f(385+x,366+y);
+            glVertex2f(384+x,369+1+y);
+            glVertex2f(383+x,366+y);
+            glVertex2f(380-.5+x,366+y);
+            glVertex2f(382+x,364+y);
+            glVertex2f(381+x,360+y);
+        glEnd();
+        glBegin(GL_POLYGON);
+        x=90;y=-10;
+            glVertex2f(384+x,362.5+y);
+            glVertex2f(387+x,360+y);
+            glVertex2f(386+x,364+y);
+            glVertex2f(389+x,366+y);
+            glVertex2f(385+x,366+y);
+            glVertex2f(384+x,369+1+y);
+            glVertex2f(383+x,366+y);
+            glVertex2f(380-.5+x,366+y);
+            glVertex2f(382+x,364+y);
+            glVertex2f(381+x,360+y);
+        glEnd();
+        glBegin(GL_POLYGON);
+        x=130;y=5;
+            glVertex2f(384+x,362.5+y);
+            glVertex2f(387+x,360+y);
+            glVertex2f(386+x,364+y);
+            glVertex2f(389+x,366+y);
+            glVertex2f(385+x,366+y);
+            glVertex2f(384+x,369+1+y);
+            glVertex2f(383+x,366+y);
+            glVertex2f(380-.5+x,366+y);
+            glVertex2f(382+x,364+y);
+            glVertex2f(381+x,360+y);
+        glEnd();
+        glBegin(GL_POLYGON);
+        x=230;y=5;
+            glVertex2f(384+x,362.5+y);
+            glVertex2f(387+x,360+y);
+            glVertex2f(386+x,364+y);
+            glVertex2f(389+x,366+y);
+            glVertex2f(385+x,366+y);
+            glVertex2f(384+x,369+1+y);
+            glVertex2f(383+x,366+y);
+            glVertex2f(380-.5+x,366+y);
+            glVertex2f(382+x,364+y);
+            glVertex2f(381+x,360+y);
+        glEnd();
+        glBegin(GL_POLYGON);
+        x=270;y=-5;
+            glVertex2f(384+x,362.5+y);
+            glVertex2f(387+x,360+y);
+            glVertex2f(386+x,364+y);
+            glVertex2f(389+x,366+y);
+            glVertex2f(385+x,366+y);
+            glVertex2f(384+x,369+1+y);
+            glVertex2f(383+x,366+y);
+            glVertex2f(380-.5+x,366+y);
+            glVertex2f(382+x,364+y);
+            glVertex2f(381+x,360+y);
+        glEnd();
 }
 
 void Lamposts()
@@ -1103,6 +1230,8 @@ void display()
     glVertex2f(0,380);
     glEnd();
 
+
+
      ///sun
     glPushMatrix();
     glTranslatef(0,suny,0);
@@ -1164,6 +1293,13 @@ void display()
     glVertex2f(240,260);
     glVertex2f(230,270);
     glEnd();
+
+    ///star
+
+    if(day=="night" || day_night>=.7)
+    {
+        Star();
+    }
 
     ///big tree
     glBegin(GL_QUADS);
@@ -1601,22 +1737,41 @@ void handleKeypress(unsigned char key, int x, int y)
     switch (key)
     {
     case 's':           ///stop all cars
-        lowerCar1_speed=0;
-        lowerCar2_speed=0;
-        lowerCar3_speed=0;
-        upperCar1_speed=0;
-        upperCar2_speed=0;
-        upperCar3_speed=0;
+        if(stop==false)
+        {
+            lowerCar1_speed=0;
+            lowerCar2_speed=0;
+            lowerCar3_speed=0;
+            upperCar1_speed=0;
+            upperCar2_speed=0;
+            upperCar3_speed=0;
+            stop=true;
+        }
+        else
+        {
+            lowerCar1_speed = 8;
+            lowerCar2_speed = 12;
+            lowerCar3_speed = 5;
+            upperCar1_speed = 8;
+            upperCar2_speed = 12;
+            upperCar3_speed = 15;
+            stop=false;
+        }
+
         break;
     case 'n':           ///signal deactivated
         Signal="null";VIPsignal="null";
         SignalTime=0;
-        lowerCar1_speed = 8;
-        lowerCar2_speed = 12;
-        lowerCar3_speed = 5;
-        upperCar1_speed = 8;
-        upperCar2_speed = 12;
-        upperCar3_speed = 15;
+        if(stop==false)
+        {
+           lowerCar1_speed = 8;
+            lowerCar2_speed = 12;
+            lowerCar3_speed = 5;
+            upperCar1_speed = 8;
+            upperCar2_speed = 12;
+            upperCar3_speed = 15;
+        }
+
         break;
     case 'r':           ///red signal activate
         Signal="red";
@@ -1624,12 +1779,15 @@ void handleKeypress(unsigned char key, int x, int y)
         break;
     case 'g':           ///green signal activate
         Signal="green";VIPsignal="null";SignalTime=0;
-        lowerCar1_speed = 8;
-        lowerCar2_speed = 12;
-        lowerCar3_speed = 5;
-        upperCar1_speed = 8;
-        upperCar2_speed = 12;
-        upperCar3_speed = 15;
+        if(stop==false)
+        {
+           lowerCar1_speed = 8;
+            lowerCar2_speed = 12;
+            lowerCar3_speed = 5;
+            upperCar1_speed = 8;
+            upperCar2_speed = 12;
+            upperCar3_speed = 15;
+        }
         break;
     case 'v':
         if(VIPsignal=="null")
@@ -1695,6 +1853,104 @@ void SpecialFunc(int key, int x, int y)
 
 
 }
+void MENU(int x)
+{
+    if(x==0)    ///Stop
+    {
+        lowerCar1_speed=0;
+        lowerCar2_speed=0;
+        lowerCar3_speed=0;
+        upperCar1_speed=0;
+        upperCar2_speed=0;
+        upperCar3_speed=0;
+        stop=true;
+	}
+	else if(x==1)     ///Run
+	{
+        lowerCar1_speed = 8;
+        lowerCar2_speed = 12;
+        lowerCar3_speed = 5;
+        upperCar1_speed = 8;
+        upperCar2_speed = 12;
+        upperCar3_speed = 15;
+        stop=false;
+	}
+	else if(x==2)   ///Day View
+	{
+        day="day";
+	}
+	else if(x==3)   ///Night View
+	{
+        day="night";
+	}
+	else if(x==4)   ///Auto Day-Night View
+	{
+        day="up";
+	}
+	else if(x==5)   ///Red Signal Activate
+	{
+        Signal="red";
+        SignalTime=0;
+	}
+	else if(x==6)   ///Green Signal Activate
+	{
+        Signal="green";VIPsignal="null";SignalTime=0;
+        if(stop==false)
+        {
+           lowerCar1_speed = 8;
+            lowerCar2_speed = 12;
+            lowerCar3_speed = 5;
+            upperCar1_speed = 8;
+            upperCar2_speed = 12;
+            upperCar3_speed = 15;
+        }
+	}
+	else if(x==7)   ///VIP Signal Activate
+	{
+         Signal="red";
+        SignalTime=0;
+        VIPsignal="vip";
+	}
+	else if(x==8)   ///VIP Signal Deactivate
+	{
+        VIPsignal="null";
+	}
+	else if(x==9)   ///Signal Deactivate
+	{
+        Signal="null";VIPsignal="null";
+        SignalTime=0;
+        if(stop==false)
+        {
+           lowerCar1_speed = 8;
+            lowerCar2_speed = 12;
+            lowerCar3_speed = 5;
+            upperCar1_speed = 8;
+            upperCar2_speed = 12;
+            upperCar3_speed = 15;
+        }
+
+	}
+	else if(x==10)   ///Increase Car Speed
+	{
+        lowerCar1_speed+=10;
+        lowerCar2_speed+=10;
+        lowerCar3_speed+=5;
+        upperCar1_speed+=6;
+        upperCar2_speed+=6;
+        upperCar3_speed+=8;
+	}
+	else if(x==11)  ///Decrease Car Speed
+	{
+        lowerCar1_speed-=5;
+        lowerCar2_speed-=5;
+        lowerCar3_speed-=4;
+        upperCar1_speed-=5;
+        upperCar2_speed-=5;
+        upperCar3_speed-=5;
+	}
+
+    glutPostRedisplay();
+}
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
@@ -1703,8 +1959,24 @@ int main(int argc, char** argv)
     glutCreateWindow("Model Town");
     glutDisplayFunc(display);
     glutTimerFunc(100, update, 0);
+
     glutKeyboardFunc(handleKeypress);
     glutSpecialFunc(SpecialFunc);
+    glutCreateMenu(MENU);
+    glutAddMenuEntry("Stop",0);
+    glutAddMenuEntry("Run",1);
+    glutAddMenuEntry("Day View",2);
+    glutAddMenuEntry("Night View",3);
+    glutAddMenuEntry("Auto Day-Night View",4);
+    glutAddMenuEntry("Red Signal Activate",5);
+    glutAddMenuEntry("Green Signal Activate",6);
+    glutAddMenuEntry("VIP Signal Activate",7);
+    glutAddMenuEntry("VIP Signal Deactivate",8);
+    glutAddMenuEntry("Signal Deactivate",9);
+    glutAddMenuEntry("Increase Car Speed",10);
+    glutAddMenuEntry("Decrease Car Speed",11);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+
     init();
     glutMainLoop();
     return 0;
