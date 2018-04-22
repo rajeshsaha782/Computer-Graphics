@@ -1,3 +1,5 @@
 # Computer Graphics
-##Day view
+## Day view
 ![day](day.png)
+## Night view
+![day](night.png)
