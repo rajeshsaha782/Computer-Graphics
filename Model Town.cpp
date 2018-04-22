@@ -5,13 +5,13 @@
 #include<iostream>
 using namespace std;
 GLint y=0;
-GLint lowerCar1 =0,lowerCar2 =300,upperCar1=300,upperCar2=100,cloud1=0,cloud2=0;
+GLint lowerCar1 =0,lowerCar2 =300,lowerCar3 =100,upperCar1=300,upperCar2=100,upperCar3=500,cloud1=0,cloud2=0,cloud3=0,SignalTime=0;
 GLfloat day_night=0;
-GLint speed = 10;
+GLint lowerCar1_speed = 8,lowerCar2_speed = 12,lowerCar3_speed = 5,upperCar1_speed = 8,upperCar2_speed = 12,upperCar3_speed = 15;
 int carx=300,suny=0;
 int environmentMode=0;
 
-string day="up";
+string day="up",Signal="red",VIPsignal="null";
 
 void update(int value)
 {
@@ -23,6 +23,10 @@ void update(int value)
     {
         lowerCar2 =-470;
     }
+    if(lowerCar3>500)
+    {
+        lowerCar3 =-470;
+    }
 
     if(upperCar1<-370)
     {
@@ -33,6 +37,10 @@ void update(int value)
     {
         upperCar2 =660;
     }
+    if(upperCar3<-350)
+    {
+        upperCar3 =660;
+    }
 
     if(cloud1<-300)
     {
@@ -42,36 +50,122 @@ void update(int value)
     {
         cloud2 =300;
     }
+    if(cloud3>200)
+    {
+        cloud3 =-700;
+    }
 
     if(day=="up")
     {
-        day_night+=.01;
-        if(day_night>=.6)
+        day_night+=.001;
+        if(day_night>=.9)
         {
             day="down";
         }
     }
-    else
+    else if(day=="down")
     {
-        day_night-=.01;
+        day_night-=.001;
         if(day_night<=0.0)
         {
             day="up";
         }
     }
 
-    cloud1 -= 2;cloud2 -= 5;
-    upperCar1 -= speed;
-    upperCar2 -= speed;
-    lowerCar1 += speed;
-    lowerCar2 += speed;
-    carx=lowerCar1;
+
+
+    cloud1 -= 2;cloud2 -= 5;cloud3 += 3;
+    if((Signal=="red"||Signal=="yellow") && (upperCar3<=305 && upperCar3>=285))
+    {
+        upperCar3_speed=0;
+    }
+    else
+    {
+        upperCar3 -= upperCar3_speed;
+    }
+    if((Signal=="red"||Signal=="yellow") && (upperCar2<=504 && upperCar2>=460))
+    {
+        upperCar2_speed=0;
+    }
+    else
+    {
+        upperCar2 -= upperCar2_speed;
+    }
+    if((Signal=="red"||Signal=="yellow") && (upperCar1<=316 && upperCar1>=300))
+    {
+        upperCar1_speed=0;
+    }
+    else
+    {
+        upperCar1 -= upperCar1_speed;
+    }
+
+    if((Signal=="red"||Signal=="yellow") && (lowerCar1>=160 && lowerCar1<=176))
+    {
+        lowerCar1_speed=0;
+    }
+    else
+    {
+        lowerCar1 += lowerCar1_speed;
+    }
+
+    if((Signal=="red"||Signal=="yellow") && (lowerCar2>=58 && lowerCar2<=82))
+    {
+        lowerCar2_speed=0;
+    }
+    else
+    {
+        lowerCar2 += lowerCar2_speed;
+    }
+
+    if((Signal=="red"||Signal=="yellow") && (lowerCar3>=170 && lowerCar3<=180))
+    {
+        lowerCar3_speed=0;
+    }
+    else
+    {
+        lowerCar3 += lowerCar3_speed;
+    }
+
+    SignalTime++;
+    if(SignalTime>10)
+    {
+        if(Signal=="red")
+        {
+            if(SignalTime>50 && VIPsignal=="null")
+            {
+                Signal="yellow";
+                SignalTime=0;
+            }
+
+        }
+        else if(Signal=="green")
+        {
+            if(SignalTime>40)
+            {
+                Signal="red";
+                SignalTime=0;
+            }
+        }
+        else if(Signal=="yellow")
+        {
+            Signal="green";VIPsignal="null";SignalTime=0;
+            lowerCar1_speed = 8;
+            lowerCar2_speed = 12;
+            lowerCar3_speed = 5;
+            upperCar1_speed = 8;
+            upperCar2_speed = 12;
+            upperCar3_speed = 15;
+        }
+
+    }
+
 
 
     //printf("%d\n",lowerCar1);
-   cout<<day_night<<endl;
-    glutPostRedisplay();
+   //cout<<cloud3<<endl;
 
+    glutPostRedisplay();
     glutTimerFunc(100, update, 0);
 }
 
@@ -112,7 +206,16 @@ void drawLampPostLight(GLfloat x, GLfloat y, GLfloat radius)
 
     glBegin(GL_LINES);
     //glColor4f(1.000, 0.980, 0.980, 1.0);
-    glColor4f(1.000, 1.980, 0.00, 1.0);
+    glColor4f(1.0, 1.0, 1.0-day_night, 1.0);
+        if(day=="day")
+        {
+           glColor4f(1.0, 1.0, 1.0, 1.0);
+        }
+        else if(day=="night")
+        {
+            glColor4f(1.0, 1.0, 0.00, 1.0);
+        }
+
     for(i = 0; i <= triangleAmount; i++)
     {
         glVertex2f( x, y);
@@ -190,7 +293,17 @@ void drawSun(GLfloat x, GLfloat y, GLfloat radius)
     glLineWidth(5.0);
 
     glBegin(GL_LINES);
-    glColor3f(1.0, .8, 0.0);
+    glColor3f(1.0, 1.0, 0.0+day_night);
+
+    if(day=="day")
+    {
+       glColor3f(1,1,0);
+    }
+    else if(day=="night")
+    {
+        glColor3f(1,1,1);
+    }
+
     for(i = 0; i <= triangleAmount; i++)
     {
         glVertex2f( x, y);
@@ -198,43 +311,177 @@ void drawSun(GLfloat x, GLfloat y, GLfloat radius)
     }
 }
 
+void Lamposts()
+{
+    ///lamp post down
+    ///1st lamp
+
+    drawLampPostLight(60,135,3);
+    glBegin(GL_LINES);
+    glColor3f(0.663, 0.663, 0.663);
+    glVertex2f(200,100);
+    glVertex2f(200,130);
+    glEnd();
+
+    glBegin(GL_LINES);
+    glColor3f(0.184, 0.310, 0.310);
+    glVertex2f(50,130);
+    glVertex2f(60,140);
+    glEnd();
+
+
+    ///2nd lamp
+
+    drawLampPostLight(210,135,3);
+    glBegin(GL_LINES);
+    glColor3f(0.663, 0.663, 0.663);
+    glVertex2f(50,100);
+    glVertex2f(50,130);
+    glEnd();
+
+    glBegin(GL_LINES);
+    glColor3f(0.184, 0.310, 0.310);
+    glVertex2f(200,130);
+    glVertex2f(210,140);
+    glEnd();
+
+
+
+    ///3rd lamp
+    drawLampPostLight(410,135,3);
+    glBegin(GL_LINES);
+    glColor3f(0.663, 0.663, 0.663);
+    glVertex2f(400,100);
+    glVertex2f(400,130);
+    glEnd();
+
+    glBegin(GL_LINES);
+    glColor3f(0.184, 0.310, 0.310);
+    glVertex2f(400,130);
+    glVertex2f(410,140);
+    glEnd();
+
+
+
+     ///4th lamp
+     drawLampPostLight(630,135,3);
+    glBegin(GL_LINES);
+    glColor3f(0.663, 0.663, 0.663);
+    glVertex2f(620,100);
+    glVertex2f(620,130);
+    glEnd();
+
+    glBegin(GL_LINES);
+    glColor3f(0.184, 0.310, 0.310);
+    glVertex2f(620,130);
+    glVertex2f(630,140);
+    glEnd();
+
+
+
+
+///upper lamp post
+    ///1st lamp
+    drawLampPostLight(80,230,3);
+    glBegin(GL_LINES);
+    glColor3f(0.663, 0.663, 0.663);
+    glVertex2f(50+20,100+95);
+    glVertex2f(50+20,130+95);
+    glEnd();
+
+    glBegin(GL_LINES);
+    glColor3f(0.184, 0.310, 0.310);
+    glVertex2f(50+20,130+95);
+    glVertex2f(60+20,140+95);
+    glEnd();
+
+
+
+    ///2nd lamp
+    drawLampPostLight(230,230,3);
+    glBegin(GL_LINES);
+    glColor3f(0.663, 0.663, 0.663);
+    glVertex2f(200+20,100+95);
+    glVertex2f(200+20,130+95);
+    glEnd();
+
+    glBegin(GL_LINES);
+    glColor3f(0.184, 0.310, 0.310);
+    glVertex2f(200+20,130+95);
+    glVertex2f(210+20,140+95);
+    glEnd();
+
+
+
+    ///3rd lamp
+    drawLampPostLight(430,230,3);
+    glBegin(GL_LINES);
+    glColor3f(0.663, 0.663, 0.663);
+    glVertex2f(400+20,100+95);
+    glVertex2f(400+20,130+95);
+    glEnd();
+
+    glBegin(GL_LINES);
+    glColor3f(0.184, 0.310, 0.310);
+    glVertex2f(400+20,130+95);
+    glVertex2f(410+20,140+95);
+    glEnd();
+
+
+
+    ///4th lamp
+ drawLampPostLight(650,230,3);
+    glBegin(GL_LINES);
+    glColor3f(0.663, 0.663, 0.663);
+    glVertex2f(620+20,100+95);
+    glVertex2f(620+20,130+95);
+    glEnd();
+
+    glBegin(GL_LINES);
+    glColor3f(0.184, 0.310, 0.310);
+    glVertex2f(620+20,130+95);
+    glVertex2f(630+20,140+95);
+    glEnd();
+
+
+}
 
 void LowerCar1()
 {
-       glPushMatrix();
+    glPushMatrix();
     glTranslatef(lowerCar1,0,0);
 
     glBegin(GL_POLYGON);
     glColor3f(.52,.76,.91);
 
-    glVertex2f(300,120);   ///carx=300;
-    glVertex2f(370,120);  ///carx=370;
-    glVertex2f(370,130);    ///carx=370;
-    glVertex2f(355,130);    ///carx=355;
-    glVertex2f(340,140);    ///carx=340;
-    glVertex2f(320,140);    ///carx=320;
-    glVertex2f(310,130);    ///carx=310;
-    glVertex2f(300,130);    ///carx=300;
+    glVertex2f(300,120+10);   ///carx=300;
+    glVertex2f(370,120+10);  ///carx=370;
+    glVertex2f(370,130+10);    ///carx=370;
+    glVertex2f(355,130+10);    ///carx=355;
+    glVertex2f(340,140+10);    ///carx=340;
+    glVertex2f(320,140+10);    ///carx=320;
+    glVertex2f(310,130+10);    ///carx=310;
+    glVertex2f(300,130+10);    ///carx=300;
     glEnd();
 
      glColor3f(.52,.76,.91);
-    drawCircle(302,125,4);
-    drawCircle(368,125,4);
+    drawCircle(302,125+10,4);
+    drawCircle(368,125+10,4);
 
 
     glBegin(GL_POLYGON);///glass
     glColor3f(0,0,0);
 
-    glVertex2f(352,130);
-    glVertex2f(340,138);
-    glVertex2f(322,138);
-    glVertex2f(313,130);
+    glVertex2f(352,130+10);
+    glVertex2f(340,138+10);
+    glVertex2f(322,138+10);
+    glVertex2f(313,130+10);
 
     glEnd();
 
     glColor4f(1.0, 1.0, 1.0, 1.0);
-    drawCarCircle(320,120,5);    ///carx=320;
-    drawCarCircle(350,120,5);    ///carx=350;
+    drawCarCircle(320,120+10,5);    ///carx=320;
+    drawCarCircle(350,120+10,5);    ///carx=350;
 
     glPopMatrix();
 }
@@ -272,14 +519,65 @@ void LowerCar2()
     glEnd();
 
     glColor4f(0.7, 0.6, 0.7, 1.0);
-    drawCarCircle(320+100,120,5);    ///carx=320;
-    drawCarCircle(350+100,120,5);    ///carx=350;
+    drawCarCircle(320+100,120,5);
+    drawCarCircle(350+100,120,5);
+
+    glColor4f(0, 0, 0, 1.0);
+    drawCarCircle(320+100,120,2);
+    drawCarCircle(350+100,120,2);
 
     glPopMatrix();
 
 }
 
+void LowerCar3()
+{
+    glPushMatrix();
+    glTranslatef(lowerCar3,0,0);
+    glBegin(GL_POLYGON);
+    glColor3f(.32,.76,0);
 
+    glVertex2f(280,120);
+    glVertex2f(370,120);
+    glVertex2f(370,150);
+    glVertex2f(280,150);
+
+    glEnd();
+
+    glColor3f(.32,.76,0);
+    drawCircle(367,127.5,7);
+
+    glColor3f(0.4,0.4,0.9);
+    glBegin(GL_QUADS);
+    int r=285,c=145;
+    for(int i=0;i<4;i++)
+    {
+        glVertex2f(r,c);
+        glVertex2f(r,c-12);
+        glVertex2f(r+12,c-12);
+        glVertex2f(r+12,c);
+
+        r+=18;
+    }
+    glColor3f(0.4,0.4,0.5);
+     glVertex2f(355,122);
+     glVertex2f(366,122);
+     glVertex2f(366,146);
+     glVertex2f(355,146);
+
+    glEnd();
+
+
+    glColor4f(0.5, 0.5, 0.5, 1.0);
+    drawCarCircle(300,120,7);
+    drawCarCircle(348,120,7);
+
+    glColor4f(0, 0, 0, 1.0);
+    drawCarCircle(300,120,4);
+    drawCarCircle(348,120,4);
+    glPopMatrix();
+
+}
 void UpperCar1()
 {
     glPushMatrix();
@@ -316,6 +614,10 @@ void UpperCar1()
     glColor4f(0.5, 0.7, 0.6, 1.0);
     drawCarCircle(320,160,5);
     drawCarCircle(350,160,5);
+
+    glColor4f(0, 0, 0, 1.0);
+    drawCarCircle(320,160,2);
+    drawCarCircle(350,160,2);
 
     glPopMatrix();
 }
@@ -363,6 +665,286 @@ void UpperCar2()
 
 
 }
+void UpperCar3()
+{
+    ///upper car 3
+
+    glPushMatrix();
+    glTranslatef(upperCar3,0,0);
+
+    glBegin(GL_POLYGON);
+    //glColor3f(.52,.76,.91);
+    glColor3f(.92,.06,.11);
+
+    glVertex2f(300,160+10);
+    glVertex2f(370,160+10);
+    glVertex2f(370,170+10);
+    glVertex2f(364,170+10);//4
+    glVertex2f(350,180+10);
+    glVertex2f(330,180+10);
+    glVertex2f(310,170+10);
+    glVertex2f(300,170+10);
+    glEnd();
+
+    glColor3f(.92,.06,.11);
+    drawCircle(302,165+10,4);
+    drawCircle(368,165+10,4);
+
+    glBegin(GL_POLYGON);///glass
+    glColor3f(0,0,0);
+
+    glVertex2f(359,170+10);
+    glVertex2f(346,179+10);
+    glVertex2f(332,179+10);
+    glVertex2f(316,170+10);
+
+    glEnd();
+
+    glColor4f(0.8, 0.6, 0.2, 1.0);
+    drawCarCircle(320,160+10,5);
+    drawCarCircle(350,160+10,5);
+
+    glPopMatrix();
+
+
+}
+
+void FirstBuilding()
+{
+    glBegin(GL_QUADS);
+    glColor3f(.5,.5,.5);
+
+    glVertex2f(0,200);
+    glVertex2f(50,200);
+    glVertex2f(50,300);
+    glVertex2f(0,300);
+    glEnd();
+
+    int m=5,n=15,l=210,k=220;
+    for(int i=0; i<6; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            glBegin(GL_QUADS);
+            glColor3f(.92,.96,1-day_night);
+
+            if(day=="day")
+            {
+               glColor3f(0.92,0.96,1);
+            }
+            else if(day=="night")
+            {
+                glColor3f(.92,.96,0);
+            }
+
+            glVertex2f(m,l);
+            glVertex2f(n,l);
+            glVertex2f(n,k);
+            glVertex2f(m,k);
+            m+=10;
+            n+=10;
+
+
+            glColor3f(.5,.5,.5);
+
+            glVertex2f(m,l);
+            glVertex2f(n,l);
+            glVertex2f(n,k);
+            glVertex2f(m,k);
+            m+=5;
+            n+=5;
+
+            glEnd();
+        }
+        k+=15;
+        l+=15;
+        m=5,n=15;
+    }
+}
+
+void SecondBuilding()
+{
+     ///2nd Building
+
+    glBegin(GL_QUADS);
+    glColor3f(.5,.5,.5);
+
+    glVertex2f(50,200);
+    glVertex2f(110,200);
+    glVertex2f(110,330);
+    glVertex2f(50,330);
+    glEnd();
+
+    int m=55,n=65,l=205,k=330;
+    for(int i=0; i<13; i++)
+    {
+        glBegin(GL_LINES);
+        glColor3f(.5,1,.5);
+        glVertex2f(50,l);
+        glVertex2f(110,l);
+        l+=10;
+        glEnd();
+    }
+
+}
+
+void ThirdBuilding()
+{
+  ///3rd Building
+
+    glBegin(GL_QUADS);
+    glColor3f(0.565, 0.633, 0.865);
+
+    glVertex2f(90,200);
+    glVertex2f(155,200);
+    glVertex2f(155,300);
+    glVertex2f(90,300);
+    glEnd();
+
+    int r=97,c=296;
+    for(int i=0; i<6; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            glBegin(GL_QUADS);
+            glColor3f(.92,.96,1-day_night);
+            if(day=="day")
+            {
+               glColor3f(0.92,0.96,1);
+            }
+            else if(day=="night")
+            {
+                glColor3f(.92,.96,0);
+            }
+
+            glVertex2f(r,c);
+            glVertex2f(r,c-10);
+            glVertex2f(r+10,c-10);
+            glVertex2f(r+10,c);
+
+            glEnd();
+
+            r+=20;
+
+
+        }
+        r=97;
+        c=296-i*15;
+
+    }
+    glBegin(GL_QUADS);
+    glColor3f(.8,.8,.8);
+
+    glVertex2f(115,200);
+    glVertex2f(135,200);
+    glVertex2f(135,225);
+    glVertex2f(115,225);
+    glEnd();
+}
+
+void FourthBuilding()
+{
+    ///4th building
+
+    glBegin(GL_QUADS);
+    glColor3f(.5,.7,.5);
+
+    glVertex2f(620,200);
+    glVertex2f(710,200);
+    glVertex2f(710,350);
+    glVertex2f(620,350);
+    glEnd();
+
+    int r=630,c=340;
+    for(int i=1; i<7; i++)
+    {
+        for(int j=0; j<4; j++)
+        {
+            glBegin(GL_QUADS);
+            glColor3f(.92,.96,1-day_night);
+            if(day=="day")
+            {
+               glColor3f(0.92,0.96,1);
+            }
+            else if(day=="night")
+            {
+                glColor3f(.92,.96,0);
+            }
+
+            glVertex2f(r,c);
+            glVertex2f(r,c-10);
+            glVertex2f(r+10,c-10);
+            glVertex2f(r+10,c);
+
+            glEnd();
+
+            r+=20;
+        }
+        r=630;
+        c=340-i*20;
+    }
+    glBegin(GL_QUADS);
+    glColor3f(1,1,1);
+
+    glVertex2f(655,200);
+    glVertex2f(675,200);
+    glVertex2f(675,225);
+    glVertex2f(655,225);
+    glEnd();
+}
+
+void FifthBuilding()
+{
+     ///5th building
+
+    glBegin(GL_QUADS);
+    glColor3f(.5,.7,.5);
+
+    glVertex2f(150,200);
+    glVertex2f(220,200);
+    glVertex2f(220,350);
+    glVertex2f(150,350);
+    glEnd();
+
+    int r1=160,c1=340;
+    for(int i=1; i<7; i++)
+    {
+        for(int j=0; j<3; j++)
+        {
+            glBegin(GL_QUADS);
+            glColor3f(.92,.96,1-day_night);
+            if(day=="day")
+            {
+               glColor3f(0.92,0.96,1);
+            }
+            else if(day=="night")
+            {
+                glColor3f(.92,.96,0);
+            }
+
+            glVertex2f(r1,c1);
+            glVertex2f(r1,c1-10);
+            glVertex2f(r1+10,c1-10);
+            glVertex2f(r1+10,c1);
+
+            glEnd();
+
+            r1+=20;
+        }
+        r1=160;
+        c1=340-i*20;
+    }
+
+    glBegin(GL_QUADS);
+    glColor3f(1,1,1);
+
+    glVertex2f(175,200);
+    glVertex2f(195,200);
+    glVertex2f(195,225);
+    glVertex2f(175,225);
+    glEnd();
+}
+
 
 void display()
 {
@@ -488,9 +1070,10 @@ void display()
     ///Lower Car
     LowerCar1();
     LowerCar2();
+    LowerCar3();
 
     ///upper car
-
+    UpperCar3();
     UpperCar1();
     UpperCar2();
 
@@ -498,9 +1081,18 @@ void display()
 
     ///Town Starts
 
+///background
     glBegin(GL_QUADS);
 
-    glColor3f(.52,.76,1-(day_night));
+    glColor3f(0.52-day_night,0.76-day_night,1-(day_night));
+    if(day=="day")
+    {
+       glColor3f(0.62,0.76,1);
+    }
+    else if(day=="night")
+    {
+        glColor3f(0.52-.9,0.76-.9,1-.9);
+    }
 
     //glColor3f(.52,.76,.91);
     //glColor4f(0.5, 0.7, 0.6, 1.0);
@@ -517,6 +1109,7 @@ void display()
     drawSun(100,360,10);
     glEnd();
     glPopMatrix();
+
 
      ///cloud1
     glPushMatrix();
@@ -536,150 +1129,32 @@ void display()
     drawCloud(215+400,330,20);
     glPopMatrix();
 
-    ///Building
-
-    glBegin(GL_QUADS);
-    if(environmentMode==0)
-    {
-         glColor3f(.5,.5,.5);
-    }
-    else
-    {
-         glColor3f(0,0,0);
-    }
-
-    glVertex2f(0,200);
-    glVertex2f(50,200);
-    glVertex2f(50,300);
-    glVertex2f(0,300);
-    glEnd();
-
-    int m=5,n=15,l=210,k=220;
-    for(int i=0; i<6; i++)
-    {
-        for(int j=0; j<3; j++)
-        {
-            glBegin(GL_QUADS);
-            glColor3f(.92,.96,1-day_night);
-
-            glVertex2f(m,l);
-            glVertex2f(n,l);
-            glVertex2f(n,k);
-            glVertex2f(m,k);
-            m+=10;
-            n+=10;
-
-            glBegin(GL_QUADS);
-            glColor3f(.5,.5,.5);
-
-            glVertex2f(m,l);
-            glVertex2f(n,l);
-            glVertex2f(n,k);
-            glVertex2f(m,k);
-            m+=5;
-            n+=5;
-
-            glEnd();
-        }
-        k+=15;
-        l+=15;
-        m=5,n=15;
-    }
-
-    ///2nd Building
-
-    glBegin(GL_QUADS);
-    glColor3f(.5,.5,.5);
-
-    glVertex2f(50,200);
-    glVertex2f(110,200);
-    glVertex2f(110,330);
-    glVertex2f(50,330);
-    glEnd();
-
-    m=55,n=65,l=205,k=330;
-    for(int i=0; i<13; i++)
-    {
-        glBegin(GL_LINES);
-        glColor3f(.5,1,.5);
-        glVertex2f(50,l);
-        glVertex2f(110,l);
-        l+=10;
-        glEnd();
-    }
-
-    ///3rd Building
-
-    glBegin(GL_QUADS);
-    glColor3f(0.565, 0.933, 0.565);
-
-    glVertex2f(90,200);
-    glVertex2f(155,200);
-    glVertex2f(155,300);
-    glVertex2f(90,300);
-    glEnd();
-
-    m=95,n=105,l=210,k=220;
-    for(int i=0; i<6; i++)
-    {
-        for(int j=0; j<3; j++)
-        {
-            glBegin(GL_QUADS);
-            glColor3f(.92,.96,1-day_night);
-
-            glVertex2f(m,l);
-            glVertex2f(n,l);
-            glVertex2f(n,k);
-            glVertex2f(m,k);
-            m+=10;
-            n+=10;
-
-            glBegin(GL_QUADS);
-            glColor3f(0.565, 0.933, 0.565);
-
-            glVertex2f(m,l);
-            glVertex2f(n,l);
-            glVertex2f(n,k);
-            glVertex2f(m,k);
-            m+=10;
-            n+=10;
-
-            glEnd();
-        }
-        k+=15;
-        l+=15;
-        m=95,n=105;
-    }
-
-
-    ///Flag
-    glBegin(GL_QUADS);
-    glColor3f(0,1,0);
-
-    glVertex2f(600,230);
-    glVertex2f(630,230);
-    glVertex2f(630,245);
-    glVertex2f(600,245);
-    glEnd();
-    glColor3f(1,0,0);
-    drawCircle(615,237,5);
-    glBegin(GL_LINES);
-    glColor3f(1,1,1);
-    glVertex2f(630,200);
-    glVertex2f(630,245);
-    glEnd();
+    ///cloud3
+    glPushMatrix();
+    glTranslatef(cloud3,0,0);
+    drawCloud(200+400,340,23);
+    drawCloud(230+400,340,23);
+    drawCloud(215+400,350,20);
+    drawCloud(215+400,330,20);
+    glPopMatrix();
 
 
 
 
 
 
-
-
-///Hill
+    ///Hill
 
     glBegin(GL_POLYGON);
-    glColor3f(.12,.96,1);
+    glColor3f(.12-day_night,.96-day_night,1-day_night);
+    if(day=="day")
+    {
+       glColor3f(.12,.96,1);
+    }
+    else if(day=="night")
+    {
+        glColor3f(.12-.9,.96-.9,1-.9);
+    }
 
     glVertex2f(170,200);
     glVertex2f(430,200);
@@ -690,8 +1165,34 @@ void display()
     glVertex2f(230,270);
     glEnd();
 
+    ///big tree
+    glBegin(GL_QUADS);
+    glColor3f(0.6,0.2,0.1);
+
+    glVertex2f(373,200);
+    glVertex2f(380,200);
+    glVertex2f(380,270);
+    glVertex2f(373,270);
+    glEnd();
+
+    drawTree(373,50+70+180,19);  ///top
+    drawTree(359,50+50+180,19);  ///left
+    drawTree(377,60+20+180,19);  ///bottom
+    drawTree(390,40+60+180,19);  ///right
+
+    ///Hill 2
+
     glBegin(GL_POLYGON);
-    glColor3f(.5,.5,.5);
+    glColor3f(.9-day_night,.8-day_night,.5-day_night);
+
+    if(day=="day")
+    {
+       glColor3f(.9,.8,.5);
+    }
+    else if(day=="night")
+    {
+        glColor3f(.9-.7,.8-.7,.5-.7);
+    }
 
     glVertex2f(350,200);
     glVertex2f(590,200);
@@ -703,9 +1204,51 @@ void display()
     glEnd();
 
 
+
+
+
+    ///Buildings
+    FifthBuilding();
+    FirstBuilding();
+    SecondBuilding();
+    ThirdBuilding();
+    FourthBuilding();
+
+    ///Flag
+    if(day_night<=.5 && day!="night")
+    {
+        glBegin(GL_QUADS);
+        glColor3f(0,1,0);
+
+        glVertex2f(600,230);
+        glVertex2f(630,230);
+        glVertex2f(630,245);
+        glVertex2f(600,245);
+        glEnd();
+        glColor3f(1,0,0);
+        drawCircle(615,237,5);
+    }
+
+
+    glBegin(GL_LINES);
+    glColor3f(1,1,1);
+    glVertex2f(630,200);
+    glVertex2f(630,245);
+    glEnd();
+
+
+
 ///building with hill
     glBegin(GL_QUADS);
-    glColor3f(0,1,1);
+    glColor3f(0,1-day_night,1-day_night);
+    if(day=="day")
+    {
+       glColor3f(0,1,1);
+    }
+    else if(day=="night")
+    {
+        glColor3f(0,1-.7,1-.7);
+    }
 
     glVertex2f(465,200);
     glVertex2f(510,200);
@@ -713,11 +1256,12 @@ void display()
     glVertex2f(465,330);
     glEnd();
 
-    m=465,n=510,l=205,k=330;
+int m=465,n=510,l=205,k=330;
     for(int i=0; i<5; i++)
     {
         glBegin(GL_LINES);
-        glColor3f(0.000, 0.502, 0.502);
+        glColor3f(0.0, 0.502+day_night, 0.502);
+
         glVertex2f(m,l);
         glVertex2f(m,k);
         m+=10;
@@ -803,135 +1347,89 @@ void display()
     glVertex2f(540,215);
     glEnd();
 
+///All lamposts here
+    Lamposts();
 
-///lamp post down
-    ///1st lamp
+///Signal Light Down road
 
-    drawLampPostLight(210,135,3);
+     glBegin(GL_LINES);
+    glColor3f(0.763, 0.763, 0.763);
+    glVertex2f(540,100);
+    glVertex2f(540,120);
+    glEnd();
+
+    glColor3f(0.763, 0.763, 0.6);
+    glBegin(GL_QUADS);
+    glVertex2f(535,120);
+    glVertex2f(545,120);
+    glVertex2f(545,150);
+    glVertex2f(535,150);
+    glEnd();
+
+    glColor3f(0.0, 0.0, 0.0);
+    drawCircle(540,145,3);
+    glColor3f(0.0, 0.0, 0.0);
+    drawCircle(540,135,3);
+    glColor3f(0.0, 0.0, 0.0);
+    drawCircle(540,125,3);
+
+    if(Signal=="red")
+    {
+        glColor3f(1.0, 0.0, 0.0);
+        drawCircle(540,145,3);
+    }
+    else if(Signal=="green")
+    {
+        glColor3f(0.0, 1.0, 0.0);
+        drawCircle(540,135,3);
+    }
+    else if(Signal=="yellow")
+    {
+        glColor3f(1.0, 1.0, 0.0);
+        drawCircle(540,125,3);
+    }
+
+
+
+
+///Signal Light up road
+
     glBegin(GL_LINES);
     glColor3f(0.663, 0.663, 0.663);
-    glVertex2f(50,100);
-    glVertex2f(50,130);
+    glVertex2f(580,190);
+    glVertex2f(580,210);
     glEnd();
 
-    glBegin(GL_LINES);
-    glColor3f(0.184, 0.310, 0.310);
-    glVertex2f(50,130);
-    glVertex2f(60,140);
+    glColor3f(0.763, 0.763, 0.6);
+    glBegin(GL_QUADS);
+    glVertex2f(575,210);
+    glVertex2f(585,210);
+    glVertex2f(585,240);
+    glVertex2f(575,240);
     glEnd();
 
-    ///2nd lamp
-    drawLampPostLight(60,135,3);
-    glBegin(GL_LINES);
-    glColor3f(0.663, 0.663, 0.663);
-    glVertex2f(200,100);
-    glVertex2f(200,130);
-    glEnd();
+    glColor3f(0.0, 0.0, 0.0);
+    drawCircle(580,235,3);
+    glColor3f(0.0, 0.0, 0.0);
+    drawCircle(580,225,3);
+    glColor3f(0.0, 0.0, 0.0);
+    drawCircle(580,215,3);
 
-    glBegin(GL_LINES);
-    glColor3f(0.184, 0.310, 0.310);
-    glVertex2f(200,130);
-    glVertex2f(210,140);
-    glEnd();
-
-
-
-    ///3rd lamp
-    drawLampPostLight(410,135,3);
-    glBegin(GL_LINES);
-    glColor3f(0.663, 0.663, 0.663);
-    glVertex2f(400,100);
-    glVertex2f(400,130);
-    glEnd();
-
-    glBegin(GL_LINES);
-    glColor3f(0.184, 0.310, 0.310);
-    glVertex2f(400,130);
-    glVertex2f(410,140);
-    glEnd();
-
-
-
-     ///4th lamp
-     drawLampPostLight(630,135,3);
-    glBegin(GL_LINES);
-    glColor3f(0.663, 0.663, 0.663);
-    glVertex2f(620,100);
-    glVertex2f(620,130);
-    glEnd();
-
-    glBegin(GL_LINES);
-    glColor3f(0.184, 0.310, 0.310);
-    glVertex2f(620,130);
-    glVertex2f(630,140);
-    glEnd();
-
-
-
-///upper lamp post
-    ///1st lamp
-    drawLampPostLight(80,230,3);
-    glBegin(GL_LINES);
-    glColor3f(0.663, 0.663, 0.663);
-    glVertex2f(50+20,100+95);
-    glVertex2f(50+20,130+95);
-    glEnd();
-
-    glBegin(GL_LINES);
-    glColor3f(0.184, 0.310, 0.310);
-    glVertex2f(50+20,130+95);
-    glVertex2f(60+20,140+95);
-    glEnd();
-
-
-
-    ///2nd lamp
-    drawLampPostLight(230,230,3);
-    glBegin(GL_LINES);
-    glColor3f(0.663, 0.663, 0.663);
-    glVertex2f(200+20,100+95);
-    glVertex2f(200+20,130+95);
-    glEnd();
-
-    glBegin(GL_LINES);
-    glColor3f(0.184, 0.310, 0.310);
-    glVertex2f(200+20,130+95);
-    glVertex2f(210+20,140+95);
-    glEnd();
-
-
-
-    ///3rd lamp
-    drawLampPostLight(430,230,3);
-    glBegin(GL_LINES);
-    glColor3f(0.663, 0.663, 0.663);
-    glVertex2f(400+20,100+95);
-    glVertex2f(400+20,130+95);
-    glEnd();
-
-    glBegin(GL_LINES);
-    glColor3f(0.184, 0.310, 0.310);
-    glVertex2f(400+20,130+95);
-    glVertex2f(410+20,140+95);
-    glEnd();
-
-
-
-    ///4th lamp
- drawLampPostLight(650,230,3);
-    glBegin(GL_LINES);
-    glColor3f(0.663, 0.663, 0.663);
-    glVertex2f(620+20,100+95);
-    glVertex2f(620+20,130+95);
-    glEnd();
-
-    glBegin(GL_LINES);
-    glColor3f(0.184, 0.310, 0.310);
-    glVertex2f(620+20,130+95);
-    glVertex2f(630+20,140+95);
-    glEnd();
-
-
+    if(Signal=="red")
+    {
+        glColor3f(1.0, 0.0, 0.0);
+    drawCircle(580,235,3);
+    }
+    else if(Signal=="green")
+    {
+        glColor3f(0.0, 1.0, 0.0);
+    drawCircle(580,225,3);
+    }
+    else if(Signal=="yellow")
+    {
+        glColor3f(1.0, 1.0, 0.0);
+    drawCircle(580,215,3);
+    }
 
 ///draw tree1
 
@@ -996,6 +1494,39 @@ void display()
     drawTree(60+250+320,50,12);
     drawTree(55+250+320,60,12);
     drawTree(55+250+320,40,12);
+
+
+    ///drawTree 5
+
+    glBegin(GL_QUADS);
+    glColor3f(0.6,0.2,0.1);
+
+    glVertex2f(53+100,10+10);
+    glVertex2f(57+100,10+10);
+    glVertex2f(57+100,40+10);
+    glVertex2f(53+100,40+10);
+    glEnd();
+
+    drawTree(50+100,50+10,14);  ///red fruit
+    drawTree(60+100,50+10,14);
+    drawTree(55+100,60+10,14);
+    drawTree(55+100,40+10,14);
+
+    ///drawTree 6
+
+    glBegin(GL_QUADS);
+    glColor3f(0.6,0.2,0.1);
+
+    glVertex2f(53+250+420,10+20);
+    glVertex2f(57+250+420,10+20);
+    glVertex2f(57+250+420,40+20);
+    glVertex2f(53+250+420,40+20);
+    glEnd();
+
+    drawTree(50+250+420,50+20,15);  ///red fruit
+    drawTree(60+250+420,50+20,15);
+    drawTree(55+250+420,60+20,15);
+    drawTree(55+250+420,40+20,15);
 
  ///upper Draw Tree  1
 
@@ -1069,46 +1600,101 @@ void handleKeypress(unsigned char key, int x, int y)
 {
     switch (key)
     {
-    case 's':
-        speed = 0;
+    case 's':           ///stop all cars
+        lowerCar1_speed=0;
+        lowerCar2_speed=0;
+        lowerCar3_speed=0;
+        upperCar1_speed=0;
+        upperCar2_speed=0;
+        upperCar3_speed=0;
         break;
-    case 'a':
-        speed = speed+10;
+    case 'n':           ///signal deactivated
+        Signal="null";VIPsignal="null";
+        SignalTime=0;
+        lowerCar1_speed = 8;
+        lowerCar2_speed = 12;
+        lowerCar3_speed = 5;
+        upperCar1_speed = 8;
+        upperCar2_speed = 12;
+        upperCar3_speed = 15;
         break;
-    case 'd':
-        if(suny>35)
+    case 'r':           ///red signal activate
+        Signal="red";
+        SignalTime=0;
+        break;
+    case 'g':           ///green signal activate
+        Signal="green";VIPsignal="null";SignalTime=0;
+        lowerCar1_speed = 8;
+        lowerCar2_speed = 12;
+        lowerCar3_speed = 5;
+        upperCar1_speed = 8;
+        upperCar2_speed = 12;
+        upperCar3_speed = 15;
+        break;
+    case 'v':
+        if(VIPsignal=="null")
         {
-            suny =-40;
+            Signal="red";
+            SignalTime=0;
+            VIPsignal="vip";
         }
-        else if(suny<-40)
-        {
-            suny =35;
-        }
-
-    if(suny>=35)
-    {
-       environmentMode=1;
-    }
-    else
-    {
-        environmentMode=0;
-    }
-    /*if(lowerCar1>460)
-    {
-        lowerCar1 =-370;
-    }
-    else if(lowerCar1<-370)
-    {
-        lowerCar1 =460;
-    }
-    */
-        printf("%d\n",suny);
-        suny -= 5;
+        else
+            VIPsignal="null";
+        break;
+    case 'd':           ///activate day view
+        day="day";
+        break;
+    case 't':           ///activate night view
+        day="night";
+        break;
+    case 'a':           ///activate auto day-night view
+        day="up";
 
         glutPostRedisplay();
     }
 }
+void SpecialFunc(int key, int x, int y)
+{
+    if(key == GLUT_KEY_UP)///to increase car speed
+    {
+        lowerCar1_speed+=10;
+        lowerCar2_speed+=10;
+        lowerCar3_speed+=5;
+        upperCar1_speed+=6;
+        upperCar2_speed+=6;
+        upperCar3_speed+=8;
+    }
+    else if(key == GLUT_KEY_DOWN)///to decrease car speed
+    {
+        lowerCar1_speed-=5;
+        lowerCar2_speed-=5;
+        lowerCar3_speed-=4;
+        upperCar1_speed-=5;
+        upperCar2_speed-=5;
+        upperCar3_speed-=5;
+    }
+    else if(key==GLUT_KEY_RIGHT)///To increase day_night speed
+    {
+        if(day=="up")
+        {
+            day_night+=.009;
+            if(day_night>=.9)
+            {
+                day="down";
+            }
+        }
+        else if(day=="down")
+        {
+            day_night-=.009;
+            if(day_night<=0.0)
+            {
+                day="up";
+            }
+        }
+    }
 
+
+}
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
@@ -1116,8 +1702,9 @@ int main(int argc, char** argv)
     glutInitWindowPosition(0,0);
     glutCreateWindow("Model Town");
     glutDisplayFunc(display);
-   glutTimerFunc(100, update, 0);
+    glutTimerFunc(100, update, 0);
     glutKeyboardFunc(handleKeypress);
+    glutSpecialFunc(SpecialFunc);
     init();
     glutMainLoop();
     return 0;
