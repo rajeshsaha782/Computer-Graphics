@@ -10,7 +10,7 @@ GLint lowerCar1 =0,lowerCar2 =300,lowerCar3 =100,upperCar1=300,upperCar2=100,upp
 GLfloat day_night=0;
 GLint lowerCar1_speed = 8,lowerCar2_speed = 12,lowerCar3_speed = 5,upperCar1_speed = 8,upperCar2_speed = 12,upperCar3_speed = 15;
 int carx=300,suny=0;
-bool stop=false,play=false;
+bool stop=false,Sound_played=false;
 int nightSound=0;
 
 string day="up",Signal="red",VIPsignal="null";
@@ -59,15 +59,15 @@ void update(int value)
 
     if(day=="up")
     {
-        day_night+=.001;
+        day_night+=.005;
         if(day_night>=.9)
         {
-            day="down";play=false;
+            day="down";Sound_played=false;
         }
     }
     else if(day=="down")
     {
-        day_night-=.001;
+        day_night-=.005;
         if(day_night<=0.0)
         {
             day="up";
@@ -173,7 +173,7 @@ void update(int value)
 
 
     //printf("%d\n",lowerCar1);
-   cout<<nightSound<<endl;
+   cout<<day_night<<endl;
 
     glutPostRedisplay();
     glutTimerFunc(100, update, 0);
@@ -1304,6 +1304,7 @@ void display()
     if(day=="night" || day_night>=.7)
     {
         Star();
+
     }
 
     ///big tree
@@ -1733,20 +1734,21 @@ int m=465,n=510,l=205,k=330;
     drawTree(55+250+400,60+180,12);
     drawTree(55+250+400,40+180,12);
 
-    if(day_night>=.71&&play==false)
+    if(day_night>=.71&&Sound_played==false)
     {
+        cout<<"1st Condition of play sound"<<endl;
          PlaySound("tara.wav", NULL, SND_FILENAME);
-         play=true;
+         Sound_played=true;
     }
     else if(day=="night" && nightSound>=19 && nightSound<20)
     {
+        cout<<"2nd Condition of Sound_played sound"<<endl;
         PlaySound("tara.wav", NULL, SND_FILENAME);
-        play=true;nightSound=22;
+        Sound_played=true;nightSound=22;
     }
 
     glFlush();
 }
-
 
 void handleKeypress(unsigned char key, int x, int y)
 {
@@ -1816,13 +1818,38 @@ void handleKeypress(unsigned char key, int x, int y)
             VIPsignal="null";
         break;
     case 'd':           ///activate day view
-        day="day";nightSound=0;
+        day="day";day_night=0;nightSound=0;
         break;
     case 't':           ///activate night view
         day="night";
         break;
     case 'a':           ///activate auto day-night view
         day="up";nightSound=0;
+        break;
+    case ' ':
+        if(day=="up")
+        {
+            day_night+=.009;
+            if(day_night>=.9)
+            {
+                day="down";Sound_played=false;
+            }
+        }
+        else if(day=="down")
+        {
+            day_night-=.009;
+            if(day_night<=0.0)
+            {
+                day="up";
+            }
+        }
+        lowerCar1_speed=50;
+        lowerCar2_speed=50;
+        lowerCar3_speed=50;
+        upperCar1_speed=50;
+        upperCar2_speed=50;
+        upperCar3_speed=50;
+        break;
 
         glutPostRedisplay();
     }
@@ -1854,7 +1881,7 @@ void SpecialFunc(int key, int x, int y)
             day_night+=.009;
             if(day_night>=.9)
             {
-                day="down";play=false;
+                day="down";Sound_played=false;
             }
         }
         else if(day=="down")
@@ -1893,7 +1920,7 @@ void MENU(int x)
 	}
 	else if(x==2)   ///Day View
 	{
-        day="day";nightSound=0;
+        day="day";day_night=0;nightSound=0;
 	}
 	else if(x==3)   ///Night View
 	{
