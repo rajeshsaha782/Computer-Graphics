@@ -3,13 +3,14 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include<iostream>
+#include<MMsystem.h>
 using namespace std;
 GLint y=0;
 GLint lowerCar1 =0,lowerCar2 =300,lowerCar3 =100,upperCar1=300,upperCar2=100,upperCar3=500,cloud1=0,cloud2=0,cloud3=0,SignalTime=0;
 GLfloat day_night=0;
 GLint lowerCar1_speed = 8,lowerCar2_speed = 12,lowerCar3_speed = 5,upperCar1_speed = 8,upperCar2_speed = 12,upperCar3_speed = 15;
 int carx=300,suny=0;
-bool stop=false;
+bool stop=false,play=false;
 
 
 string day="up",Signal="red",VIPsignal="null";
@@ -61,7 +62,7 @@ void update(int value)
         day_night+=.001;
         if(day_night>=.9)
         {
-            day="down";
+            day="down";play=false;
         }
     }
     else if(day=="down")
@@ -1728,6 +1729,12 @@ int m=465,n=510,l=205,k=330;
     drawTree(55+250+400,60+180,12);
     drawTree(55+250+400,40+180,12);
 
+    if(day_night>=.71&&play==false)
+    {
+         PlaySound("tara.wav", NULL, SND_FILENAME);
+         play=true;
+    }
+
     glFlush();
 }
 
@@ -1838,7 +1845,7 @@ void SpecialFunc(int key, int x, int y)
             day_night+=.009;
             if(day_night>=.9)
             {
-                day="down";
+                day="down";play=false;
             }
         }
         else if(day=="down")
