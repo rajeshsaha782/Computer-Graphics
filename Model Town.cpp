@@ -1733,10 +1733,15 @@ int m=465,n=510,l=205,k=330;
     drawTree(55+250+400,60+180,12);
     drawTree(55+250+400,40+180,12);
 
-    if((day_night>=.71 || nightSound>=19)&&play==false)
+    if(day_night>=.71&&play==false)
     {
          PlaySound("tara.wav", NULL, SND_FILENAME);
-         play=true;nightSound=0;
+         play=true;
+    }
+    else if(day=="night" && nightSound>=19 && nightSound<20)
+    {
+        PlaySound("tara.wav", NULL, SND_FILENAME);
+        play=true;nightSound=22;
     }
 
     glFlush();
@@ -1811,13 +1816,13 @@ void handleKeypress(unsigned char key, int x, int y)
             VIPsignal="null";
         break;
     case 'd':           ///activate day view
-        day="day";
+        day="day";nightSound=0;
         break;
     case 't':           ///activate night view
         day="night";
         break;
     case 'a':           ///activate auto day-night view
-        day="up";
+        day="up";nightSound=0;
 
         glutPostRedisplay();
     }
@@ -1888,7 +1893,7 @@ void MENU(int x)
 	}
 	else if(x==2)   ///Day View
 	{
-        day="day";
+        day="day";nightSound=0;
 	}
 	else if(x==3)   ///Night View
 	{
@@ -1896,7 +1901,7 @@ void MENU(int x)
 	}
 	else if(x==4)   ///Auto Day-Night View
 	{
-        day="up";
+        day="up";nightSound=0;
 	}
 	else if(x==5)   ///Red Signal Activate
 	{
