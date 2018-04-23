@@ -11,7 +11,7 @@ GLfloat day_night=0;
 GLint lowerCar1_speed = 8,lowerCar2_speed = 12,lowerCar3_speed = 5,upperCar1_speed = 8,upperCar2_speed = 12,upperCar3_speed = 15;
 int carx=300,suny=0;
 bool stop=false,play=false;
-
+int nightSound=0;
 
 string day="up",Signal="red",VIPsignal="null";
 
@@ -72,6 +72,10 @@ void update(int value)
         {
             day="up";
         }
+    }
+    if(day=="night" && nightSound<=20)
+    {
+        nightSound++;
     }
 
 
@@ -169,7 +173,7 @@ void update(int value)
 
 
     //printf("%d\n",lowerCar1);
-   //cout<<cloud3<<endl;
+   cout<<nightSound<<endl;
 
     glutPostRedisplay();
     glutTimerFunc(100, update, 0);
@@ -1729,10 +1733,10 @@ int m=465,n=510,l=205,k=330;
     drawTree(55+250+400,60+180,12);
     drawTree(55+250+400,40+180,12);
 
-    if(day_night>=.71&&play==false)
+    if((day_night>=.71 || nightSound>=19)&&play==false)
     {
          PlaySound("tara.wav", NULL, SND_FILENAME);
-         play=true;
+         play=true;nightSound=0;
     }
 
     glFlush();
