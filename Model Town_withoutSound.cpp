@@ -3,15 +3,14 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include<iostream>
-#include<MMsystem.h>
 using namespace std;
 GLint y=0;
 GLint lowerCar1 =0,lowerCar2 =300,lowerCar3 =100,upperCar1=300,upperCar2=100,upperCar3=500,cloud1=0,cloud2=0,cloud3=0,SignalTime=0;
 GLfloat day_night=0;
 GLint lowerCar1_speed = 8,lowerCar2_speed = 12,lowerCar3_speed = 5,upperCar1_speed = 8,upperCar2_speed = 12,upperCar3_speed = 15;
 int carx=300,suny=0;
-bool stop=false,Sound_played=false,Sound_mute=false;
-int nightSound=0;
+bool stop=false;
+
 
 string day="up",Signal="red",VIPsignal="null";
 
@@ -59,23 +58,19 @@ void update(int value)
 
     if(day=="up")
     {
-        day_night+=.005;
+        day_night+=.001;
         if(day_night>=.9)
         {
-            day="down";Sound_played=false;
+            day="down";
         }
     }
     else if(day=="down")
     {
-        day_night-=.005;
+        day_night-=.001;
         if(day_night<=0.0)
         {
             day="up";
         }
-    }
-    if(day=="night" && nightSound<=20 && Sound_mute==false)
-    {
-        nightSound++;
     }
 
 
@@ -168,13 +163,12 @@ void update(int value)
         {
             Signal="red";SignalTime=0;
         }
-
     }
 
 
 
     //printf("%d\n",lowerCar1);
-   cout<<day_night<<endl;
+   //cout<<cloud3<<endl;
 
     glutPostRedisplay();
     glutTimerFunc(100, update, 0);
@@ -1305,7 +1299,6 @@ void display()
     if(day=="night" || day_night>=.7)
     {
         Star();
-
     }
 
     ///big tree
@@ -1735,21 +1728,9 @@ int m=465,n=510,l=205,k=330;
     drawTree(55+250+400,60+180,12);
     drawTree(55+250+400,40+180,12);
 
-    if(day_night>=.71&&Sound_played==false)
-    {
-        cout<<"1st Condition of play sound"<<endl;
-         PlaySound("tara.wav", NULL, SND_FILENAME);
-         Sound_played=true;
-    }
-    else if(day=="night" && nightSound>=19 && nightSound<20)
-    {
-        cout<<"2nd Condition of Sound_played sound"<<endl;
-        PlaySound("tara.wav", NULL, SND_FILENAME);
-        Sound_played=true;nightSound=22;
-    }
-
     glFlush();
 }
+
 
 void handleKeypress(unsigned char key, int x, int y)
 {
@@ -1819,21 +1800,21 @@ void handleKeypress(unsigned char key, int x, int y)
             VIPsignal="null";
         break;
     case 'd':           ///activate day view
-        day="day";day_night=0;nightSound=0;
+        day="day";
         break;
     case 't':           ///activate night view
         day="night";
         break;
     case 'a':           ///activate auto day-night view
-        day="up";nightSound=0;
+        day="up";
         break;
-    case ' ':           ///move fast day-night view
+    case ' ':
         if(day=="up")
         {
             day_night+=.009;
             if(day_night>=.9)
             {
-                day="down";Sound_played=false;
+                day="down";
             }
         }
         else if(day=="down")
@@ -1844,19 +1825,6 @@ void handleKeypress(unsigned char key, int x, int y)
                 day="up";
             }
         }
-        break;
-    case 'm':           ///Sound effect
-        if(Sound_mute)
-        {
-            Sound_mute=false;
-            cout<<"Sound activate"<<endl;
-        }
-        else
-        {
-            Sound_mute=true;
-            cout<<"Sound muted"<<endl;
-        }
-
         glutPostRedisplay();
     }
 }
@@ -1887,7 +1855,7 @@ void SpecialFunc(int key, int x, int y)
             day_night+=.009;
             if(day_night>=.9)
             {
-                day="down";Sound_played=false;
+                day="down";
             }
         }
         else if(day=="down")
@@ -1926,7 +1894,7 @@ void MENU(int x)
 	}
 	else if(x==2)   ///Day View
 	{
-        day="day";day_night=0;nightSound=0;
+        day="day";
 	}
 	else if(x==3)   ///Night View
 	{
@@ -1934,7 +1902,7 @@ void MENU(int x)
 	}
 	else if(x==4)   ///Auto Day-Night View
 	{
-        day="up";nightSound=0;
+        day="up";
 	}
 	else if(x==5)   ///Red Signal Activate
 	{
@@ -1997,20 +1965,6 @@ void MENU(int x)
         upperCar2_speed-=5;
         upperCar3_speed-=5;
 	}
-	else if(x==12)  ///Sound mute
-	{
-	    if(Sound_mute)
-        {
-            Sound_mute=false;
-            cout<<"Sound activated"<<endl;
-        }
-        else
-        {
-            Sound_mute=true;
-            cout<<"Sound muted"<<endl;
-        }
-
-	}
 
     glutPostRedisplay();
 }
@@ -2031,7 +1985,7 @@ int main(int argc, char** argv)
     glutAddMenuEntry("Day View(d)",2);
     glutAddMenuEntry("Night View(t)",3);
     glutAddMenuEntry("Auto Day-Night View(a)",4);
-    glutAddMenuEntry("Move Faster Day-night View(space)",13);
+    glutAddMenuEntry("Move Faster Day-night View(space)",12);
     glutAddMenuEntry("Red Signal Activate(r)",5);
     glutAddMenuEntry("Green Signal Activate(g)",6);
     glutAddMenuEntry("VIP Signal Activate(v)",7);
@@ -2039,8 +1993,6 @@ int main(int argc, char** argv)
     glutAddMenuEntry("Traffic Signal Deactivate(n)",9);
     glutAddMenuEntry("Increase Car Speed(up)",10);
     glutAddMenuEntry("Decrease Car Speed(down)",11);
-    glutAddMenuEntry("Mute Sound(m)",12);
-
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 
     init();
