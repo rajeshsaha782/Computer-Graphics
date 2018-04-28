@@ -1735,7 +1735,7 @@ int m=465,n=510,l=205,k=330;
     drawTree(55+250+400,60+180,12);
     drawTree(55+250+400,40+180,12);
 
-    if(day_night>=.71&&Sound_played==false)
+    if(day_night>=.71&&Sound_played==false && Sound_mute==false)
     {
         cout<<"1st Condition of play sound"<<endl;
          PlaySound("tara.wav", NULL, SND_FILENAME);
@@ -2040,6 +2040,7 @@ int main(int argc, char** argv)
     glutAddMenuEntry("Increase Car Speed(up)",10);
     glutAddMenuEntry("Decrease Car Speed(down)",11);
     glutAddMenuEntry("Mute Sound(m)",12);
+    glutAddMenuEntry("Activate Sound(m)",12);
 
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 
