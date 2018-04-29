@@ -174,7 +174,7 @@ void update(int value)
 
 
     //printf("%d\n",lowerCar1);
-   cout<<day_night<<endl;
+  // cout<<day_night<<endl;
 
     glutPostRedisplay();
     glutTimerFunc(100, update, 0);
@@ -1765,6 +1765,7 @@ void handleKeypress(unsigned char key, int x, int y)
             upperCar2_speed=0;
             upperCar3_speed=0;
             stop=true;
+            cout<<"Cars Stop"<<endl;
         }
         else
         {
@@ -1775,6 +1776,7 @@ void handleKeypress(unsigned char key, int x, int y)
             upperCar2_speed = 12;
             upperCar3_speed = 15;
             stop=false;
+            cout<<"Cars Running"<<endl;
         }
 
         break;
@@ -1789,12 +1791,14 @@ void handleKeypress(unsigned char key, int x, int y)
             upperCar1_speed = 8;
             upperCar2_speed = 12;
             upperCar3_speed = 15;
+            cout<<"Signal Deactivate"<<endl;
         }
 
         break;
     case 'r':           ///red signal activate
         Signal="red";
         SignalTime=0;
+        cout<<"Red Signal Activate"<<endl;
         break;
     case 'g':           ///green signal activate
         Signal="green";VIPsignal="null";SignalTime=0;
@@ -1806,6 +1810,7 @@ void handleKeypress(unsigned char key, int x, int y)
             upperCar1_speed = 8;
             upperCar2_speed = 12;
             upperCar3_speed = 15;
+            cout<<"Green Signal Activate"<<endl;
         }
         break;
     case 'v':
@@ -1814,18 +1819,25 @@ void handleKeypress(unsigned char key, int x, int y)
             Signal="red";
             SignalTime=0;
             VIPsignal="vip";
+            cout<<"VIP Signal Activate"<<endl;
         }
         else
+        {
             VIPsignal="null";
+            cout<<"VIP Signal Deactivate"<<endl;
+        }
         break;
     case 'd':           ///activate day view
         day="day";day_night=0;nightSound=0;
+        cout<<"Day View"<<endl;
         break;
     case 't':           ///activate night view
         day="night";
+        cout<<"Night View"<<endl;
         break;
     case 'a':           ///activate auto day-night view
         day="up";nightSound=0;
+        cout<<"Auto Day-Night View"<<endl;
         break;
     case ' ':           ///move fast day-night view
         if(day=="up")
@@ -1913,6 +1925,7 @@ void MENU(int x)
         upperCar2_speed=0;
         upperCar3_speed=0;
         stop=true;
+        cout<<"Cars Stop"<<endl;
 	}
 	else if(x==1)     ///Run
 	{
@@ -1923,23 +1936,28 @@ void MENU(int x)
         upperCar2_speed = 12;
         upperCar3_speed = 15;
         stop=false;
+        cout<<"Cars Running"<<endl;
 	}
 	else if(x==2)   ///Day View
 	{
         day="day";day_night=0;nightSound=0;
+        cout<<"Day View"<<endl;
 	}
 	else if(x==3)   ///Night View
 	{
         day="night";
+        cout<<"Night View"<<endl;
 	}
 	else if(x==4)   ///Auto Day-Night View
 	{
         day="up";nightSound=0;
+        cout<<"Auto Day-Night View"<<endl;
 	}
 	else if(x==5)   ///Red Signal Activate
 	{
         Signal="red";
         SignalTime=0;
+        cout<<"Red Signal Activate"<<endl;
 	}
 	else if(x==6)   ///Green Signal Activate
 	{
@@ -1952,6 +1970,7 @@ void MENU(int x)
             upperCar1_speed = 8;
             upperCar2_speed = 12;
             upperCar3_speed = 15;
+            cout<<"Green Signal Activate"<<endl;
         }
 	}
 	else if(x==7)   ///VIP Signal Activate
@@ -1959,10 +1978,12 @@ void MENU(int x)
          Signal="red";
         SignalTime=0;
         VIPsignal="vip";
+        cout<<"VIP Signal Activate"<<endl;
 	}
 	else if(x==8)   ///VIP Signal Deactivate
 	{
         VIPsignal="null";
+        cout<<"VIP Signal Deactivate"<<endl;
 	}
 	else if(x==9)   ///Signal Deactivate
 	{
@@ -1970,6 +1991,7 @@ void MENU(int x)
         SignalTime=0;
         if(stop==false)
         {
+            cout<<"Signal Deactivate"<<endl;
            lowerCar1_speed = 8;
             lowerCar2_speed = 12;
             lowerCar3_speed = 5;
@@ -1981,6 +2003,7 @@ void MENU(int x)
 	}
 	else if(x==10)   ///Increase Car Speed
 	{
+	    cout<<"Increase Car Speed"<<endl;
         lowerCar1_speed+=10;
         lowerCar2_speed+=10;
         lowerCar3_speed+=5;
@@ -1990,6 +2013,7 @@ void MENU(int x)
 	}
 	else if(x==11)  ///Decrease Car Speed
 	{
+	    cout<<"Decrease Car Speed"<<endl;
         lowerCar1_speed-=5;
         lowerCar2_speed-=5;
         lowerCar3_speed-=4;
