@@ -1241,7 +1241,7 @@ void display()
      ///sun
     glPushMatrix();
     glTranslatef(0,suny,0);
-    drawSun(100,360,10);
+    drawSun(100,360,13);
     glEnd();
     glPopMatrix();
 
